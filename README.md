@@ -1,4 +1,7 @@
-# Nu primesc notă pentru că nu am pus titlu și descriere
+### EcoSys (Numele este temporar)
+
+Aceasta aplicatie va simula evolutia in timp a unui ecosistem alcatuit din plante si animale.
+Mai multe idei vor fi adaugate pe parcursul proiectului.
 
 ### Important!
 Aveți voie cu cod generat de modele de limbaj la care nu ați contribuit semnificativ doar în folder-ul `generated`.

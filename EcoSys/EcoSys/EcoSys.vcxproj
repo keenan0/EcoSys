@@ -139,6 +139,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MapConfigurator.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="TileSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Debug.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="includes.h" />
     <ClInclude Include="MapConfigurator.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="TileSelector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

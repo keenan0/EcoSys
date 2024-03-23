@@ -58,6 +58,13 @@ void Game::InitMapConfigurator() {
 }
 
 void Game::InitTileMap() {
+	/*
+		@return void
+		 
+		- initializeaza tilemap-ul 
+		- calea spre textura trebuie sa fie fara img/ (e deja inclus in constructor)
+	*/
+
 	Vector2u mapSize = GetMapSize();
 
 	this->_tileMap = TileMap(mapSize.x, mapSize.y);
@@ -69,11 +76,62 @@ void Game::InitTileMap() {
 	);
 }
 
+void Game::InitTileSelector() {
+	/*
+		@return void
+
+		- initializeaza tile selectorul cu dimensiunea unui tile si cu scaling factor ul potrivit
+	*/
+
+	this->_selector = TileSelector(this->TILE_SIZE, this->SCALING_FACTOR);
+}
+
+void Game::HandleMouseSelectorInput() {
+	if (Keyboard::isKeyPressed(Keyboard::Left)) {
+		this->BIAS -= 0.1f;
+		cout << "BIAS: " << this->BIAS << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Right)) {
+		this->BIAS += 0.1f;
+		cout << "BIAS: " << this->BIAS << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}
+	if (Keyboard::isKeyPressed(Keyboard::Space)) {
+		this->OCTAVES = (this->OCTAVES + 1) % 8;
+		cout << "OCTAVES: " << this->OCTAVES << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}
+	
+	/*if (this->_ev.key.code == Keyboard::Left) {
+		this->BIAS -= 0.1f;
+		cout << "BIAS: " << this->BIAS << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}
+	if (this->_ev.key.code == Keyboard::Right) {
+		this->BIAS += 0.1f;
+		cout << "BIAS: " << this->BIAS << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}
+	if (this->_ev.key.code == Keyboard::Space) {
+		this->OCTAVES = (this->OCTAVES + 1) % 8;
+		cout << "OCTAVES: " << this->OCTAVES << '\n';
+		this->_mapConfig.Update(this->OCTAVES, this->BIAS);
+		this->_tileMap.Update(this->_mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
+	}*/
+}
+
 Game::Game() {
 	this->InitVariables();
 	this->InitWindow();
 	this->InitMapConfigurator();
 	this->InitTileMap();
+	this->InitTileSelector();
 }
 
 Game::~Game() {
@@ -93,27 +151,11 @@ void Game::HandleInput() {
 		case Event::KeyPressed:
 			if (this->_ev.key.code == Keyboard::Escape)
 				this->_window->close();
-			if (this->_ev.key.code == Keyboard::Left) {
-				this->BIAS -= 0.1f;
-				cout << "BIAS: " << this->BIAS << '\n';
-				this->_mapConfig.Update(this->OCTAVES, this->BIAS);
-				this->_tileMap.Update(this->_mapConfig.GetMap());
-			}
-			if (this->_ev.key.code == Keyboard::Right) {
-				this->BIAS += 0.1f;
-				cout << "BIAS: " << this->BIAS << '\n';
-				this->_mapConfig.Update(this->OCTAVES, this->BIAS);
-				this->_tileMap.Update(this->_mapConfig.GetMap());
-			}
-			if (this->_ev.key.code == Keyboard::Space) {
-				this->OCTAVES = (this->OCTAVES + 1) % 8;
-				cout << "OCTAVES: " << this->OCTAVES << '\n';
-				this->_mapConfig.Update(this->OCTAVES, this->BIAS);
-				this->_tileMap.Update(this->_mapConfig.GetMap());
-			}
+			this->HandleMouseSelectorInput();
 			break;
 		}
 	}
+
 }
 
 Vector2u Game::GetMapSize() const {
@@ -123,8 +165,8 @@ Vector2u Game::GetMapSize() const {
 	}
 
 	Vector2u mapSize = Vector2u(
-		this->_window->getSize().x / this->TILE_SIZE.x,
-		this->_window->getSize().y / this->TILE_SIZE.y
+		this->_window->getSize().x / this->TILE_SIZE.x / this->SCALING_FACTOR,
+		this->_window->getSize().y / this->TILE_SIZE.y / this->SCALING_FACTOR
 	);
 
 	return mapSize;
@@ -132,12 +174,14 @@ Vector2u Game::GetMapSize() const {
 
 void Game::Update() {
 	this->HandleInput();
+	this->_selector.Update(this->_window);
 }
 
 void Game::Render() {
 	this->_window->clear();
 
 	this->_window->draw(this->_tileMap);
+	this->_selector.Render(this->_window);
 
 	this->_window->display();
 }

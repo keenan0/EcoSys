@@ -2,6 +2,7 @@
 
 #include "MapConfigurator.h"
 #include "TileMap.h"
+#include "TileSelector.h"
 
 #include "includes.h"
 
@@ -17,7 +18,7 @@ private:
 
 	//Cat de mari sa fie randate tileuri-le
 	//Posibil sa nu mai fie nevoie de ea
-	const float SCALING_FACTOR = 1.0f;
+	const float SCALING_FACTOR = 3.0f;
 
 	//*****TEMPORAR PENTRU TESTARE
 	float BIAS = 2.0f;
@@ -32,6 +33,7 @@ private:
 
 	Event _ev;
 
+	TileSelector _selector;
 	MapConfigurator _mapConfig;
 	TileMap _tileMap;
 
@@ -43,6 +45,9 @@ private:
 
 	void InitMapConfigurator();
 	void InitTileMap();
+	void InitTileSelector();
+
+	void HandleMouseSelectorInput();
 public:
 	Game();
 	~Game();

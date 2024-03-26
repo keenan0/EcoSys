@@ -9,6 +9,7 @@ void Game::InitVariables() {
 
 	this->_endGame = false;
 	this->_window = nullptr;
+	this->_mainView = View(FloatRect(0, 0, 1080, 720));
 }
 
 void Game::InitWindow() {
@@ -31,6 +32,10 @@ void Game::InitWindow() {
 
 	this->SetWindowIcon(this->ICON_PATH);
 	this->_window->setVerticalSyncEnabled(true);
+
+	this->_mainView.setViewport(FloatRect(0.08f, 0.f, 1.f, 1.f));
+
+	this->_window->setView(this->_mainView);
 }
 
 void Game::SetWindowIcon(const string& fileName) {
@@ -83,7 +88,8 @@ void Game::InitTileSelector() {
 		- initializeaza tile selectorul cu dimensiunea unui tile si cu scaling factor ul potrivit
 	*/
 
-	this->_selector = TileSelector(this->TILE_SIZE, this->SCALING_FACTOR);
+	this->_selector.SetScalingFactor(this->SCALING_FACTOR);
+	this->_selector.SetTileSize(this->TILE_SIZE);
 }
 
 void Game::HandleMouseSelectorInput() {
@@ -126,6 +132,43 @@ void Game::HandleMouseSelectorInput() {
 	}*/
 }
 
+void Game::MoveView() {
+	switch (this->_ev.type) {
+	case Event::KeyPressed:
+		if (this->_ev.key.code == Keyboard::W) {
+			this->_mainView.move(0.f, -10.f);
+		}
+		if (this->_ev.key.code == Keyboard::S) {
+			this->_mainView.move(0.f, 10.f);
+		}
+		if (this->_ev.key.code == Keyboard::A) {
+			this->_mainView.move(-10.f, 0.f);
+		}
+		if (this->_ev.key.code == Keyboard::D) {
+			this->_mainView.move(10.f, 0.f);
+		}
+
+		this->_window->setView(this->_mainView);
+
+		/*switch (this->_ev.key.code) {
+		case Keyboard::W:
+			this->_mainView.move(0.f, -10.f);
+			break;
+		case Keyboard::A:
+			this->_mainView.move(-10.f, 0.f);
+			break;
+		case Keyboard::S:
+			this->_mainView.move(0.f, 10.f);
+			break;
+		case Keyboard::D:
+			this->_mainView.move(10.f, 0.f);
+			break;
+		}
+		this->_window->setView(this->_mainView);
+		break;*/
+	}
+}
+
 Game::Game() {
 	this->InitVariables();
 	this->InitWindow();
@@ -144,6 +187,8 @@ const bool Game::GetWindowOpen() const {
 
 void Game::HandleInput() {
 	while (this->_window->pollEvent(this->_ev)) {
+		this->_selector.HandleInput(this->_ev);
+
 		switch (this->_ev.type) {
 		case Event::Closed:
 			this->_window->close();
@@ -152,6 +197,20 @@ void Game::HandleInput() {
 			if (this->_ev.key.code == Keyboard::Escape)
 				this->_window->close();
 			this->HandleMouseSelectorInput();
+			this->MoveView();
+			break;
+		case Event::MouseWheelScrolled:
+			if (this->_ev.mouseWheelScroll.delta < 0) {	
+				cout << "Scroll down: \n";
+				this->_mainView.zoom(2.f);
+			}
+			else if (this->_ev.mouseWheelScroll.delta > 0) {
+				cout << "Scroll up: \n";
+				this->_mainView.zoom(0.5f);
+			}
+			
+			this->_window->setView(this->_mainView);
+
 			break;
 		}
 	}

@@ -18,7 +18,7 @@ private:
 
 	//Cat de mari sa fie randate tileuri-le
 	//Posibil sa nu mai fie nevoie de ea
-	const float SCALING_FACTOR = 3.0f;
+	const float SCALING_FACTOR = 0.5f;
 
 	//*****TEMPORAR PENTRU TESTARE
 	float BIAS = 2.0f;
@@ -30,6 +30,7 @@ private:
 	VideoMode _videoMode;
 	RenderWindow* _window;
 	Image _windowIcon;
+	View _mainView;
 
 	Event _ev;
 
@@ -48,6 +49,7 @@ private:
 	void InitTileSelector();
 
 	void HandleMouseSelectorInput();
+	void MoveView();
 public:
 	Game();
 	~Game();

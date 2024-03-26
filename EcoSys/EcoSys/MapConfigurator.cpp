@@ -119,18 +119,22 @@ void MapConfigurator::GeneratePerlin(uint maxOctaves, float bias) {
         for (int j = 0; j < this->_height; ++j) {
             float value = this->_perlinNoise[i + j * this->_width];
 
-            if (value < 0.3f) {
-                this->_map[i + j * this->_width] = TILE_TYPE::MOUNTAIN;
+            TILE_TYPE selectedTile = TILE_TYPE::GRASS;
+
+            if (value < 0.2f) {
+                selectedTile = TILE_TYPE::MOUNTAIN;
             }
             else if (value < 0.5f) {
-                this->_map[i + j * this->_width] = TILE_TYPE::GRASS;
+                selectedTile = TILE_TYPE::GRASS;
             }
-            else if (value < 0.8f) {
-                this->_map[i + j * this->_width] = TILE_TYPE::SAND;
+            else if (value < 0.7f) {
+                selectedTile = TILE_TYPE::SAND;
             }
             else {
-                this->_map[i + j * this->_width] = TILE_TYPE::WATER;
+                selectedTile = TILE_TYPE::WATER;
             }
+
+            this->_map[i + j * this->_width] = selectedTile;
         }
     }
 }

@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EcoSys.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="TileSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="enums.h" />

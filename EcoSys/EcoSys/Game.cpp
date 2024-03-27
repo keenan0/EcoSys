@@ -33,7 +33,7 @@ void Game::InitWindow() {
 	this->SetWindowIcon(this->ICON_PATH);
 	this->_window->setVerticalSyncEnabled(true);
 
-	this->_mainView.setViewport(FloatRect(0.08f, 0.f, 1.f, 1.f));
+	this->_mainView.setViewport(FloatRect(0.1f, 0.f, 1.f, 1.f));
 
 	this->_window->setView(this->_mainView);
 }
@@ -92,6 +92,16 @@ void Game::InitTileSelector() {
 	this->_selector.SetTileSize(this->TILE_SIZE);
 }
 
+void Game::InitEntities() {
+	/*
+		@return void
+	*/
+
+	this->_carrot = new Entity();
+	this->_carrot->LoadTexture("carrot.png");
+	this->_carrot->SetPosition(5, 2);
+}
+
 void Game::HandleMouseSelectorInput() {
 	if (Keyboard::isKeyPressed(Keyboard::Left)) {
 		this->BIAS -= 0.1f;
@@ -136,37 +146,24 @@ void Game::MoveView() {
 	switch (this->_ev.type) {
 	case Event::KeyPressed:
 		if (this->_ev.key.code == Keyboard::W) {
-			this->_mainView.move(0.f, -10.f);
+			this->_mainView.move(0.f, -static_cast<float>(this->TILE_SIZE.y) * this->SCALING_FACTOR);
 		}
 		if (this->_ev.key.code == Keyboard::S) {
-			this->_mainView.move(0.f, 10.f);
+			this->_mainView.move(0.f, static_cast<float>(this->TILE_SIZE.y) * this->SCALING_FACTOR);
 		}
 		if (this->_ev.key.code == Keyboard::A) {
-			this->_mainView.move(-10.f, 0.f);
+			this->_mainView.move(-static_cast<float>(this->TILE_SIZE.y) * this->SCALING_FACTOR, 0.f);
 		}
 		if (this->_ev.key.code == Keyboard::D) {
-			this->_mainView.move(10.f, 0.f);
+			this->_mainView.move(static_cast<float>(this->TILE_SIZE.y) * this->SCALING_FACTOR, 0.f);
 		}
 
 		this->_window->setView(this->_mainView);
-
-		/*switch (this->_ev.key.code) {
-		case Keyboard::W:
-			this->_mainView.move(0.f, -10.f);
-			break;
-		case Keyboard::A:
-			this->_mainView.move(-10.f, 0.f);
-			break;
-		case Keyboard::S:
-			this->_mainView.move(0.f, 10.f);
-			break;
-		case Keyboard::D:
-			this->_mainView.move(10.f, 0.f);
-			break;
-		}
-		this->_window->setView(this->_mainView);
-		break;*/
 	}
+}
+
+void Game::RenderEntities() {
+	this->_carrot->Render(this->_window, this->SCALING_FACTOR);
 }
 
 Game::Game() {
@@ -175,14 +172,7 @@ Game::Game() {
 	this->InitMapConfigurator();
 	this->InitTileMap();
 	this->InitTileSelector();
-}
-
-Game::~Game() {
-	delete this->_window;
-}
-
-const bool Game::GetWindowOpen() const {
-	return this->_window->isOpen();
+	this->InitEntities();
 }
 
 void Game::HandleInput() {
@@ -217,6 +207,31 @@ void Game::HandleInput() {
 
 }
 
+void Game::Update() {
+	this->HandleInput();
+	this->_carrot->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
+	this->_selector.SetSelectedEntity(*this->_carrot);
+	this->_selector.Update(this->_window);
+}
+
+void Game::Render() {
+	this->_window->clear();
+	this->_window->draw(this->_tileMap);
+
+	this->RenderEntities();
+
+	this->_selector.Render(this->_window);
+	this->_window->display();
+}
+
+Game::~Game() {
+	delete this->_window;
+}
+
+const bool Game::GetWindowOpen() const {
+	return this->_window->isOpen();
+}
+
 Vector2u Game::GetMapSize() const {
 	if (this->TILE_SIZE.x == 0 || this->TILE_SIZE.y == 0) {
 		Debug::Error("GetMapSize() : impartire la TILE_SIZE = 0.");
@@ -229,18 +244,4 @@ Vector2u Game::GetMapSize() const {
 	);
 
 	return mapSize;
-}
-
-void Game::Update() {
-	this->HandleInput();
-	this->_selector.Update(this->_window);
-}
-
-void Game::Render() {
-	this->_window->clear();
-
-	this->_window->draw(this->_tileMap);
-	this->_selector.Render(this->_window);
-
-	this->_window->display();
 }

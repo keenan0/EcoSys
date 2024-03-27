@@ -23,7 +23,7 @@ private:
 
 	bool _isSelected;
 
-	Entity _selectedEntity;
+	Entity* _selectedEntity;
 
 	void InitVariables();
 	void UpdateMouse(RenderWindow* target);
@@ -38,6 +38,8 @@ public:
 	void HandleInput(Event ev);
 	void SetScalingFactor(float scalingFactor);
 	void SetTileSize(Vector2u tileSize);
+	void SetSelectedEntity(Entity& entity);
+	
 	void UpdateVariables(Vector2u tileSize, float scalingFactor);
 	void Update(RenderWindow* target);
 	void Render(RenderTarget* target);

@@ -18,7 +18,7 @@ private:
 
 	//Cat de mari sa fie randate tileuri-le
 	//Posibil sa nu mai fie nevoie de ea
-	const float SCALING_FACTOR = 0.5f;
+	const float SCALING_FACTOR = 1.5f;
 
 	//*****TEMPORAR PENTRU TESTARE
 	float BIAS = 2.0f;
@@ -38,6 +38,9 @@ private:
 	MapConfigurator _mapConfig;
 	TileMap _tileMap;
 
+	//TEMPORAR PENTRU A VERIFICA CUM SE ADAUGA O ENTITATE (CARROT)
+	Entity* _carrot;
+
 	//~FUNCTII PRIVATE
 	void InitVariables();
 
@@ -48,8 +51,12 @@ private:
 	void InitTileMap();
 	void InitTileSelector();
 
+	void InitEntities();
+
 	void HandleMouseSelectorInput();
 	void MoveView();
+
+	void RenderEntities();
 public:
 	Game();
 	~Game();

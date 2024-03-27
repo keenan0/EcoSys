@@ -4,13 +4,14 @@ void TileSelector::InitVariables() {
 	this->_hover = Color(38, 38, 38, 255);
 	this->_click = Color(35, 166, 35, 255);
 	this->_error = Color(166, 35, 35, 255);
-	this->_outlineColor = this->_error;
+	this->_outlineColor = this->_hover;
 
 	this->_isSelected = true;
 	
 	if (!this->_outlineTexture.loadFromFile("img/outline.png"))
 		Debug::Error("Outline-ul nu s-a incarcat corect.");
 
+	this->_selectedEntity = nullptr;
 	this->_mousePosWindow = Vector2i(0, 0);
 	this->_mousePosView = Vector2f(0.f, 0.f);
 	this->_tileCoords = Vector2i(0, 0);
@@ -84,6 +85,13 @@ void TileSelector::HandleInput(Event ev) {
 			this->_isSelected = !this->_isSelected;
 		}
 	}
+	if (this->_isSelected) {
+		if (ev.type == Event::MouseButtonPressed) {
+			if (ev.mouseButton.button == Mouse::Left)
+				this->_isSelected = false;
+			cout << this->_tileCoords.x << ' ' << this->_tileCoords.y << '\n';
+		}
+	}
 }
 
 void TileSelector::RenderTileOutline(RenderTarget* target) {
@@ -120,4 +128,8 @@ void TileSelector::Update(RenderWindow* target) {
 
 void TileSelector::Render(RenderTarget* target) {
 	this->RenderTileOutline(target);
+}
+
+void TileSelector::SetSelectedEntity(Entity& entity) {
+	this->_selectedEntity = nullptr;
 }

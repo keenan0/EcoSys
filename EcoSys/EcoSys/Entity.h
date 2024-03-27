@@ -2,40 +2,29 @@
 #include "includes.h"
 
 class Entity {
-private:
-    Vector2f _position;
+protected:
+    Vector2i _tilePosition;
 
     TILE_TYPE _isOnTile;
 
     Texture _texture;
     Sprite _sprite;
+
+    Vector2f MapTileCoords(Vector2i tileCoords);
 public:
     Entity();
-    Entity(Vector2f position) : _position(position), _isOnTile(TILE_TYPE::WATER) {}
-
+    Entity(Vector2f position) : _tilePosition(position), _isOnTile(TILE_TYPE::WATER) {}
     Entity(const Entity& toCopy);
+    virtual ~Entity() = default;
 
     bool LoadTexture(const string& textureFileName);
+    
+    void Render(RenderWindow* currentWindow, const float scalingFactor);
+    void UpdateSprite(Vector2u tileSize, float scalingFactor);
 
-    void DrawSprite(RenderWindow& currentWindow) {
-        //this->_sprite.setScale(Vector2f(SCALING_FACTOR, SCALING_FACTOR));
+    void SetPosition(Vector2i position) { this->_tilePosition = position; }
+    void SetPosition(int x, int y) { this->_tilePosition = Vector2i(x, y); }
+    Vector2i GetPosition() const { return this->_tilePosition; }
 
-        currentWindow.draw(this->_sprite);
-    }
-
-    Vector2f getPosition() const { return this->_position; }
-
-    ~Entity() {
-        cout << "Avertisment: Entitate distrusa!\n";
-    }
-
-    Entity& operator=(const Entity& e) {
-        this->_position = e._position;
-        this->_sprite = e._sprite;
-        this->_texture = e._texture;
-
-        cout << "Avertizare: Entiate atribuita cu succes\n";
-
-        return *this;
-    }
+    Entity& operator=(const Entity& e);
 };

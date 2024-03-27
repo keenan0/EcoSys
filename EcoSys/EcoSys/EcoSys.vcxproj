@@ -133,16 +133,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animal.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="EcoSys.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MapConfigurator.cpp" />
+    <ClCompile Include="Plant.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="TileSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animal.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Entity.h" />
@@ -150,6 +153,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="MapConfigurator.h" />
+    <ClInclude Include="Plant.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileSelector.h" />
   </ItemGroup>

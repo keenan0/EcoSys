@@ -3,6 +3,8 @@
 #include "MapConfigurator.h"
 #include "TileMap.h"
 #include "TileSelector.h"
+#include "Animal.h"
+#include "Plant.h"
 
 #include "includes.h"
 
@@ -14,11 +16,11 @@ private:
 	const string ICON_PATH = "img/carrot.png";
 	
 	//Dimensiunea fiecarui tile din textura
-	const Vector2u TILE_SIZE = Vector2u(8, 8);
+	const sf::Vector2u TILE_SIZE = sf::Vector2u(8, 8);
 
 	//Cat de mari sa fie randate tileuri-le
 	//Posibil sa nu mai fie nevoie de ea
-	const float SCALING_FACTOR = 1.5f;
+	const float SCALING_FACTOR = 4.f;
 
 	//*****TEMPORAR PENTRU TESTARE
 	float BIAS = 2.0f;
@@ -27,12 +29,12 @@ private:
 	//~VARIABILE PRIVATE
 	bool _endGame;
 
-	VideoMode _videoMode;
-	RenderWindow* _window;
-	Image _windowIcon;
-	View _mainView;
+	sf::VideoMode _videoMode;
+	sf::RenderWindow* _window;
+	sf::Image _windowIcon;
+	sf::View _mainView;
 
-	Event _ev;
+	sf::Event _ev;
 
 	TileSelector _selector;
 	MapConfigurator _mapConfig;
@@ -40,6 +42,8 @@ private:
 
 	//TEMPORAR PENTRU A VERIFICA CUM SE ADAUGA O ENTITATE (CARROT)
 	Entity* _carrot;
+	Entity* _rabbit;
+	Entity* _rabbit2;
 
 	//~FUNCTII PRIVATE
 	void InitVariables();
@@ -57,13 +61,14 @@ private:
 	void MoveView();
 
 	void RenderEntities();
+	void UpdateEntities();
 public:
 	Game();
 	~Game();
 
 	const bool GetWindowOpen() const;
 	void HandleInput();
-	Vector2u GetMapSize() const;
+	sf::Vector2u GetMapSize() const;
 
 	void Update();
 	void Render();

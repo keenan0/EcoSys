@@ -8,11 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <ctime>
 
 #include "enums.h"
 #include "Debug.h"
-
-using namespace std;
-using namespace sf;
 
 typedef unsigned int uint;

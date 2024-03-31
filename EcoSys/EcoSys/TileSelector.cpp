@@ -1,9 +1,9 @@
 #include "TileSelector.h"
 
 void TileSelector::InitVariables() {
-	this->_hover = Color(38, 38, 38, 255);
-	this->_click = Color(35, 166, 35, 255);
-	this->_error = Color(166, 35, 35, 255);
+	this->_hover = sf::Color(38, 38, 38, 255);
+	this->_click = sf::Color(35, 166, 35, 255);
+	this->_error = sf::Color(166, 35, 35, 255);
 	this->_outlineColor = this->_hover;
 
 	this->_isSelected = true;
@@ -12,25 +12,25 @@ void TileSelector::InitVariables() {
 		Debug::Error("Outline-ul nu s-a incarcat corect.");
 
 	this->_selectedEntity = nullptr;
-	this->_mousePosWindow = Vector2i(0, 0);
-	this->_mousePosView = Vector2f(0.f, 0.f);
-	this->_tileCoords = Vector2i(0, 0);
+	this->_mousePosWindow = sf::Vector2i(0, 0);
+	this->_mousePosView = sf::Vector2f(0.f, 0.f);
+	this->_tileCoords = sf::Vector2i(0, 0);
 
 	this->_outline.setTexture(this->_outlineTexture);
 	this->_outline.setColor(this->_outlineColor);
-	this->_outline.setPosition(Vector2f(0.f, 0.f));
+	this->_outline.setPosition(sf::Vector2f(0.f, 0.f));
 }
 
 TileSelector::TileSelector() {
 	this->InitVariables();
 }
 
-void TileSelector::UpdateMouse(RenderWindow* target) {
-	this->_mousePosWindow = Mouse::getPosition(*target);
+void TileSelector::UpdateMouse(sf::RenderWindow* target) {
+	this->_mousePosWindow = sf::Mouse::getPosition(*target);
 	this->_mousePosView = target->mapPixelToCoords(this->_mousePosWindow);
 }
 
-Vector2i TileSelector::GetTileCoords(RenderWindow* window) {
+sf::Vector2i TileSelector::GetTileCoords(sf::RenderWindow* window) {
 	//TODO: Inca nu stiu de ce nu merge cum vreau eu dar o las asa momentan
 	
 	/*
@@ -40,9 +40,9 @@ Vector2i TileSelector::GetTileCoords(RenderWindow* window) {
 		- returneaza coordonatele tile-ului in care se afla mouse-ul 
 	*/
 
-	View view = window->getView();
+	sf::View view = window->getView();
 
-	Vector2f worldPos = this->_mousePosView;
+	sf::Vector2f worldPos = this->_mousePosView;
 
 
 	/*
@@ -63,7 +63,7 @@ Vector2i TileSelector::GetTileCoords(RenderWindow* window) {
 	
 	*/
 
-	Vector2i tileCoords = Vector2i(
+	sf::Vector2i tileCoords = sf::Vector2i(
 		worldPos.x / this->_tileSize.x / this->_scalingFactor,
 		worldPos.y / this->_tileSize.y / this->_scalingFactor
 	);
@@ -79,22 +79,22 @@ void TileSelector::Debug() {
 	cout << "TEXTURE SIZE: " << this->_outlineTexture.getSize().x << ' ' << this->_outlineTexture.getSize().y << '\n';
 }
 
-void TileSelector::HandleInput(Event ev) {
-	if (ev.type == Event::KeyPressed) {
-		if (ev.key.code == Keyboard::R) {
+void TileSelector::HandleInput(sf::Event ev) {
+	if (ev.type == sf::Event::KeyPressed) {
+		if (ev.key.code == sf::Keyboard::R) {
 			this->_isSelected = !this->_isSelected;
 		}
 	}
 	if (this->_isSelected) {
-		if (ev.type == Event::MouseButtonPressed) {
-			if (ev.mouseButton.button == Mouse::Left)
+		if (ev.type == sf::Event::MouseButtonPressed) {
+			if (ev.mouseButton.button == sf::Mouse::Left)
 				this->_isSelected = false;
 			cout << this->_tileCoords.x << ' ' << this->_tileCoords.y << '\n';
 		}
 	}
 }
 
-void TileSelector::RenderTileOutline(RenderTarget* target) {
+void TileSelector::RenderTileOutline(sf::RenderTarget* target) {
 	if (this->_isSelected) {
 		target->draw(this->_outline);
 	}
@@ -106,16 +106,16 @@ void TileSelector::SetScalingFactor(float scalingFactor) {
 	this->_outline.setScale(this->_scalingFactor, this->_scalingFactor);
 }
 
-void TileSelector::SetTileSize(Vector2u tileSize) {
+void TileSelector::SetTileSize(sf::Vector2u tileSize) {
 	this->_tileSize = tileSize;
 }
 
-void TileSelector::UpdateVariables(Vector2u tileSize, float scalingFactor) {
+void TileSelector::UpdateVariables(sf::Vector2u tileSize, float scalingFactor) {
 	this->_scalingFactor = scalingFactor;
 	this->_tileSize = tileSize;
 }
 
-void TileSelector::Update(RenderWindow* target) {
+void TileSelector::Update(sf::RenderWindow* target) {
 	this->UpdateMouse(target);
 
 	this->_tileCoords = this->GetTileCoords(target);
@@ -126,7 +126,7 @@ void TileSelector::Update(RenderWindow* target) {
 	);
 }
 
-void TileSelector::Render(RenderTarget* target) {
+void TileSelector::Render(sf::RenderTarget* target) {
 	this->RenderTileOutline(target);
 }
 

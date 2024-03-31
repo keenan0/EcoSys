@@ -20,6 +20,8 @@ public:
     MapConfigurator();
     ~MapConfigurator() = default;
 
+    MapConfigurator& operator=(const MapConfigurator& other);
+
     MapConfigurator(uint width, uint height, uint maxTextures = 1, MAP_CONFIG mode = MAP_CONFIG::RANDOM);
 
     void GenerateRandom();
@@ -29,6 +31,8 @@ public:
     void Debug() const;
 
     const int* GetMap() const { return this->_map; }
+    int GetWidth() const { return this->_width; }
+    int GetHeight() const { return this->_height; }
     void SetWidth(const uint width) { this->_width = width; }
     void SetHeight(const uint height) { this->_height = height; }
 };

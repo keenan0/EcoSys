@@ -1,6 +1,6 @@
 #pragma once
 
-const enum TILE_TYPE {
+enum TILE_TYPE {
     GRASS, WATER, SAND, MOUNTAIN, GRASS3, UNDEFINED, TILE_TYPE_SIZE
 };
 //
@@ -33,6 +33,6 @@ const enum TILE_TYPE {
 //    selectedTile = (enum TILE_TYPE)(rand() % 3 + 8);
 //}
 
-const enum MAP_CONFIG {
+enum MAP_CONFIG {
     RANDOM, PERLIN
 };

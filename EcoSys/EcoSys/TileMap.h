@@ -1,10 +1,10 @@
 #pragma once
 #include "includes.h"
 
-class TileMap : public Drawable, public Transformable {
+class TileMap : public sf::Drawable, public sf::Transformable {
 private:
-    Texture _texture;
-    VertexArray _tileMapVertices;
+    sf::Texture _texture;
+    sf::VertexArray _tileMapVertices;
 
     uint _width;
     uint _height;
@@ -16,8 +16,8 @@ public:
 
     TileMap(uint width, uint height);
 
-    bool LoadTileMap(const string& tileMapTextureName, const int* tileConfig, Vector2u tileSize, float scalingFactor = 1.0f);
-    void Update(const int* tileConfig, Vector2u tileSize = Vector2u(8,8), float scalingFactor = 1.0f);
+    bool LoadTileMap(const string& tileMapTextureName, const int* tileConfig, sf::Vector2u tileSize, float scalingFactor = 1.0f);
+    void Update(const int* tileConfig, sf::Vector2u tileSize = sf::Vector2u(8,8), float scalingFactor = 1.0f);
 
     void SetWidth(const uint width) { this->_width = width; }
     void SetHeight(const uint height) { this->_height = height; }

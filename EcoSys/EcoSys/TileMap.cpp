@@ -17,7 +17,7 @@ TileMap::TileMap(uint width, uint height) {
     this->_height = height;
 }
 
-bool TileMap::LoadTileMap(const string& tileMapTextureName, const int* tileConfig, Vector2u tileSize, float scalingFactor) {
+bool TileMap::LoadTileMap(const string& tileMapTextureName, const int* tileConfig, sf::Vector2u tileSize, float scalingFactor) {
     /*
         @return bool
 
@@ -33,7 +33,7 @@ bool TileMap::LoadTileMap(const string& tileMapTextureName, const int* tileConfi
         return false;
     }
 
-    this->_tileMapVertices.setPrimitiveType(PrimitiveType::Quads);
+    this->_tileMapVertices.setPrimitiveType(sf::PrimitiveType::Quads);
     this->_tileMapVertices.resize(this->_width * this->_height * 4);
 
     for (int i = 0; i < this->_width; ++i) {
@@ -44,25 +44,25 @@ bool TileMap::LoadTileMap(const string& tileMapTextureName, const int* tileConfi
             int textureX = tileNumber % nTilesInTextureRow;
             int textureY = tileNumber / nTilesInTextureRow;
 
-            Vertex* quad = &this->_tileMapVertices[(i + j * this->_width) * 4];
+            sf::Vertex* quad = &this->_tileMapVertices[(i + j * this->_width) * 4];
 
-            quad[0].position = Vector2f(i * tileSize.x, j * tileSize.y) * scalingFactor;
-            quad[1].position = Vector2f((i + 1) * tileSize.x, j * tileSize.y) * scalingFactor;
-            quad[2].position = Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
-            quad[3].position = Vector2f(i * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
+            quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y) * scalingFactor;
+            quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y) * scalingFactor;
+            quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
+            quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
 
-            quad[0].texCoords = Vector2f(textureX * tileSize.x, textureY * tileSize.y);
-            quad[1].texCoords = Vector2f((textureX + 1) * tileSize.x, textureY * tileSize.y);
-            quad[2].texCoords = Vector2f((textureX + 1) * tileSize.x, (textureY + 1) * tileSize.y);
-            quad[3].texCoords = Vector2f(textureX * tileSize.x, (textureY + 1) * tileSize.y);
+            quad[0].texCoords = sf::Vector2f(textureX * tileSize.x, textureY * tileSize.y);
+            quad[1].texCoords = sf::Vector2f((textureX + 1) * tileSize.x, textureY * tileSize.y);
+            quad[2].texCoords = sf::Vector2f((textureX + 1) * tileSize.x, (textureY + 1) * tileSize.y);
+            quad[3].texCoords = sf::Vector2f(textureX * tileSize.x, (textureY + 1) * tileSize.y);
         }
     }
 
     return true;
 }
 
-void TileMap::Update(const int* tileConfig, Vector2u tileSize, float scalingFactor) {
-    this->_tileMapVertices.setPrimitiveType(PrimitiveType::Quads);
+void TileMap::Update(const int* tileConfig, sf::Vector2u tileSize, float scalingFactor) {
+    this->_tileMapVertices.setPrimitiveType(sf::PrimitiveType::Quads);
     this->_tileMapVertices.resize(this->_width * this->_height * 4);
 
     for (int i = 0; i < this->_width; ++i) {
@@ -73,17 +73,17 @@ void TileMap::Update(const int* tileConfig, Vector2u tileSize, float scalingFact
             int textureX = tileNumber % nTilesInTextureRow;
             int textureY = tileNumber / nTilesInTextureRow;
 
-            Vertex* quad = &this->_tileMapVertices[(i + j * this->_width) * 4];
+            sf::Vertex* quad = &this->_tileMapVertices[(i + j * this->_width) * 4];
 
-            quad[0].position = Vector2f(i * tileSize.x, j * tileSize.y) * scalingFactor;
-            quad[1].position = Vector2f((i + 1) * tileSize.x, j * tileSize.y) * scalingFactor;
-            quad[2].position = Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
-            quad[3].position = Vector2f(i * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
+            quad[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y) * scalingFactor;
+            quad[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y) * scalingFactor;
+            quad[2].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
+            quad[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y) * scalingFactor;
 
-            quad[0].texCoords = Vector2f(textureX * tileSize.x, textureY * tileSize.y);
-            quad[1].texCoords = Vector2f((textureX + 1) * tileSize.x, textureY * tileSize.y);
-            quad[2].texCoords = Vector2f((textureX + 1) * tileSize.x, (textureY + 1) * tileSize.y);
-            quad[3].texCoords = Vector2f(textureX * tileSize.x, (textureY + 1) * tileSize.y);
+            quad[0].texCoords = sf::Vector2f(textureX * tileSize.x, textureY * tileSize.y);
+            quad[1].texCoords = sf::Vector2f((textureX + 1) * tileSize.x, textureY * tileSize.y);
+            quad[2].texCoords = sf::Vector2f((textureX + 1) * tileSize.x, (textureY + 1) * tileSize.y);
+            quad[3].texCoords = sf::Vector2f(textureX * tileSize.x, (textureY + 1) * tileSize.y);
         }
     }
 }

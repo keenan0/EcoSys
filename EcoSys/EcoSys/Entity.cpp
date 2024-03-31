@@ -1,7 +1,7 @@
 #include "Entity.h"
 
-Vector2f Entity::MapTileCoords(Vector2i tileCoords) {
-    return Vector2f(
+sf::Vector2f Entity::MapTileCoords(sf::Vector2i tileCoords) {
+    return sf::Vector2f(
         static_cast<float>(this->_tilePosition.x),
         static_cast<float>(this->_tilePosition.y)
     );
@@ -9,7 +9,7 @@ Vector2f Entity::MapTileCoords(Vector2i tileCoords) {
 
 Entity::Entity() {
     this->_isOnTile = TILE_TYPE::UNDEFINED;
-    this->_tilePosition = Vector2i(0, 0);
+    this->_tilePosition = sf::Vector2i(0, 0);
 }
 
 Entity::Entity(const Entity& toCopy) {
@@ -38,6 +38,10 @@ bool Entity::LoadTexture(const string& textureFileName) {
     return true;
 }
 
+void Entity::Move(sf::Vector2i delta) {
+    this->_tilePosition = this->_tilePosition + delta;
+}
+
 Entity& Entity::operator=(const Entity& e) {
     this->_tilePosition = e._tilePosition;
     this->_sprite = e._sprite;
@@ -48,16 +52,16 @@ Entity& Entity::operator=(const Entity& e) {
     return *this;
 }
 
-void Entity::Render(RenderWindow* currentWindow, const float scalingFactor) {
+void Entity::Render(sf::RenderWindow* currentWindow, const float scalingFactor) {
     if (this->_sprite.getTexture()) {
-        this->_sprite.setScale(Vector2f(scalingFactor, scalingFactor));
+        this->_sprite.setScale(sf::Vector2f(scalingFactor, scalingFactor));
         currentWindow->draw(this->_sprite);
     }
     else Debug::Error("Sprite is not initialised.");
 }
 
-void Entity::UpdateSprite(Vector2u tileSize, float scalingFactor) {
-    this->_sprite.setPosition(Vector2f(
+void Entity::UpdateSprite(sf::Vector2u tileSize, float scalingFactor) {
+    this->_sprite.setPosition(sf::Vector2f(
         static_cast<float>(this->_tilePosition.x * tileSize.x * scalingFactor),
         static_cast<float>(this->_tilePosition.y * tileSize.y * scalingFactor)
     ));

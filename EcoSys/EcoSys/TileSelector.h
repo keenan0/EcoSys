@@ -5,43 +5,43 @@
 
 class TileSelector {
 private:
-	Color _hover;
-	Color _click;
-	Color _error;
+	sf::Color _hover;
+	sf::Color _click;
+	sf::Color _error;
 
-	Vector2u _tileSize;
+	sf::Vector2u _tileSize;
 	float _scalingFactor;
 
-	Vector2i _mousePosWindow;
-	Vector2f _mousePosView;
+	sf::Vector2i _mousePosWindow;
+	sf::Vector2f _mousePosView;
 
-	Vector2i _tileCoords;
+	sf::Vector2i _tileCoords;
 
-	Texture _outlineTexture;
-	Sprite _outline;
-	Color _outlineColor;
+	sf::Texture _outlineTexture;
+	sf::Sprite _outline;
+	sf::Color _outlineColor;
 
 	bool _isSelected;
 
 	Entity* _selectedEntity;
 
 	void InitVariables();
-	void UpdateMouse(RenderWindow* target);
-	void RenderTileOutline(RenderTarget* target);
+	void UpdateMouse(sf::RenderWindow* target);
+	void RenderTileOutline(sf::RenderTarget* target);
 	
-	Vector2i GetTileCoords(RenderWindow* window);
+	sf::Vector2i GetTileCoords(sf::RenderWindow* window);
 	void Debug();
 public:
 	TileSelector();
 	~TileSelector() = default;
 
-	void HandleInput(Event ev);
+	void HandleInput(sf::Event ev);
 	void SetScalingFactor(float scalingFactor);
-	void SetTileSize(Vector2u tileSize);
+	void SetTileSize(sf::Vector2u tileSize);
 	void SetSelectedEntity(Entity& entity);
 	
-	void UpdateVariables(Vector2u tileSize, float scalingFactor);
-	void Update(RenderWindow* target);
-	void Render(RenderTarget* target);
+	void UpdateVariables(sf::Vector2u tileSize, float scalingFactor);
+	void Update(sf::RenderWindow* target);
+	void Render(sf::RenderTarget* target);
 };
 

@@ -33,12 +33,12 @@ void MapConfigurator::PerlinNoise(uint maxOctaves, float bias) {
 
                 if (pitch == 0) pitch = 1;
 
-                Vector2i s1((i / pitch) * pitch, (j / pitch) * pitch);
-                Vector2i s2((s1.x + pitch) % this->_width, (s1.y + pitch) % this->_height);
+                sf::Vector2i s1((i / pitch) * pitch, (j / pitch) * pitch);
+                sf::Vector2i s2((s1.x + pitch) % this->_width, (s1.y + pitch) % this->_height);
 
-                Vector2f blend((float)(i - s1.x) / (float)pitch, (float)(j - s1.y) / (float)pitch);
+                sf::Vector2f blend((float)(i - s1.x) / (float)pitch, (float)(j - s1.y) / (float)pitch);
 
-                Vector2f sample(
+                sf::Vector2f sample(
                     (1 - blend.x) * this->_noiseSeed[s1.y * this->_width + s1.x] + blend.x * this->_noiseSeed[s1.y * this->_width + s2.x],
                     (1 - blend.x) * this->_noiseSeed[s2.y * this->_width + s1.x] + blend.x * this->_noiseSeed[s2.y * this->_width + s2.x]
                 );
@@ -63,6 +63,26 @@ MapConfigurator::MapConfigurator() {
     this->_height = 0;
     this->_maxTextures = 1;
     this->_mode = MAP_CONFIG::RANDOM;
+}
+
+MapConfigurator& MapConfigurator::operator=(const MapConfigurator& other) {
+    /*
+        @operator= 
+
+        - The function overloads the = operator to set a MapConfigurator to another one
+    */
+    
+    if (this != &other) {
+        this->_map = other._map;
+        this->_noiseSeed = other._noiseSeed;
+        this->_perlinNoise = other._perlinNoise;
+        this->_mode = other._mode;
+        this->_width = other._width;
+        this->_height = other._height;
+        this->_maxTextures = other._maxTextures;
+    }
+
+    return *this;
 }
 
 MapConfigurator::MapConfigurator(uint width, uint height, uint maxTextures, MAP_CONFIG mode) {

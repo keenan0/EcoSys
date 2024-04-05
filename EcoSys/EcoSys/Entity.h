@@ -20,7 +20,7 @@ public:
     bool LoadTexture(const string& textureFileName);
     void Move(sf::Vector2i delta);
 
-    virtual void Render(sf::RenderWindow* currentWindow, const float scalingFactor);
+    virtual void Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor);
     void UpdateSprite(sf::Vector2u tileSize, float scalingFactor);
 
     //Getteri si setteri

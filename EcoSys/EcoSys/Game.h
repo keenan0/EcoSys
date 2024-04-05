@@ -20,11 +20,11 @@ private:
 
 	//Cat de mari sa fie randate tileuri-le
 	//Posibil sa nu mai fie nevoie de ea
-	const float SCALING_FACTOR = 4.f;
+	const float SCALING_FACTOR = 2.f;
 
 	//*****TEMPORAR PENTRU TESTARE
-	float BIAS = 2.0f;
-	uint OCTAVES = 4;
+	float BIAS = 0.5f;
+	uint OCTAVES = 5;
 
 	//~VARIABILE PRIVATE
 	bool _endGame;
@@ -43,11 +43,15 @@ private:
 	//TEMPORAR PENTRU A VERIFICA CUM SE ADAUGA O ENTITATE (CARROT)
 	Entity* _carrot;
 	Entity* _rabbit;
-	Entity* _rabbit2;
+
+	vector<Entity*> entities;
+	uint nEntities;
+
+	std::random_device rd;
 
 	//~FUNCTII PRIVATE
 	void InitVariables();
-
+	
 	void InitWindow();
 	void SetWindowIcon(const string& fileName);
 

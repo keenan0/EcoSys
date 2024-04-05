@@ -37,7 +37,8 @@ void Animal::InitVariables() {
 	*/
 
 	this->health = 10;
-	this->actionTime = 0.2f;
+	this->actionTime = 1.5f;
+	this->isMouseSelected = false;
 	this->clock.restart();
 
 	this->UpdateVisionRange(2);
@@ -51,7 +52,7 @@ bool Animal::IsBounded(int x, int y,uint width, uint height) const {
 		- Used in computing the tile offset
 	*/
 
-	if (x < 0 || x > width || y < 0 || y > height)
+	if (x < 0 || x >= width || y < 0 || y >= height)
 		return false;
 
 	return true;
@@ -214,6 +215,7 @@ void Animal::Update() {
 		- Update function for the animal
 		- Uses the internal animal clock to update the animal position, stats, etc.
 	*/
+	this->ComputeTileOffsets();
 
 	sf::Time elapsedTime = this->clock.getElapsedTime();
 
@@ -222,6 +224,21 @@ void Animal::Update() {
 
 		this->Wander();
 		//this->GetNextPosition();
+	}
+}
+
+void Animal::DisplayStats() {
+	std::cout << "Health: " << this->health << '\n';
+	std::cout << "Action Time: " << this->actionTime << '\n';
+	cout << '\n';
+}
+
+void Animal::Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) {
+	this->Entity::Render(currentWindow, tileSize, scalingFactor);
+	
+	if (this->isMouseSelected) {
+		std::cout << "ok\n";
+		this->RenderVisibleTiles(currentWindow, tileSize, scalingFactor);
 	}
 }
 

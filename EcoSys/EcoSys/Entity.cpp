@@ -52,7 +52,7 @@ Entity& Entity::operator=(const Entity& e) {
     return *this;
 }
 
-void Entity::Render(sf::RenderWindow* currentWindow, const float scalingFactor) {
+void Entity::Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) {
     if (this->_sprite.getTexture()) {
         this->_sprite.setScale(sf::Vector2f(scalingFactor, scalingFactor));
         currentWindow->draw(this->_sprite);

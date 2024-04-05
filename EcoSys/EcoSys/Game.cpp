@@ -87,7 +87,7 @@ void Game::InitTileSelector() {
 
 		- initializeaza tile selectorul cu dimensiunea unui tile si cu scaling factor ul potrivit
 	*/
-
+	//this->_selector = TileSelector(this->entities);
 	this->_selector.SetScalingFactor(this->SCALING_FACTOR);
 	this->_selector.SetTileSize(this->TILE_SIZE);
 }
@@ -96,21 +96,36 @@ void Game::InitEntities() {
 	/*
 		@return void
 	*/
+	this->nEntities = 4;
+
+	std::mt19937 eng(rd());
+	std::uniform_int_distribution<> widthDistr(0, this->_mapConfig.GetWidth());
+	std::uniform_int_distribution<> heightDistr(0, this->_mapConfig.GetHeight());
+	std::uniform_int_distribution<> vision(1, 5);
+	std::uniform_real_distribution<> actionTime(0.1f, 1.5f);
+
+	for (int i = 0; i < nEntities; ++i) {
+		this->entities.push_back(new Animal(this->_mapConfig));
+
+		this->entities[i]->LoadTexture("rabbit.png");
+		
+		int x = widthDistr(eng);
+		int y = heightDistr(eng);
+
+		this->entities[i]->SetPosition(x, y);
+
+		dynamic_cast<Animal*>(this->entities[i])->UpdateVisionRange(vision(eng));
+		dynamic_cast<Animal*>(this->entities[i])->SetActionTime(actionTime(eng));
+	}
 
 	this->_carrot = new Entity();
 	this->_carrot->LoadTexture("carrot.png");
 	this->_carrot->SetPosition(15, 20);
 
-	this->_rabbit = new Animal(this->_mapConfig);
-	this->_rabbit->LoadTexture("rabbit.png");
-	this->_rabbit->SetPosition(5,5);
-	dynamic_cast<Animal*>(this->_rabbit)->UpdateVisionRange(2);
-
-	/*this->_rabbit2 = new Animal(this->_mapConfig);
-	this->_rabbit2->LoadTexture("rabbit.png");
-	this->_rabbit2->SetPosition(15, 7);
-	dynamic_cast<Animal*>(this->_rabbit2)->UpdateVisionRange(3);
-	dynamic_cast<Animal*>(this->_rabbit2)->SetActionTime(0.2f);*/
+	//this->_rabbit = new Animal(this->_mapConfig);
+	//this->_rabbit->LoadTexture("rabbit.png");
+	//this->_rabbit->SetPosition(5,5);
+	//dynamic_cast<Animal*>(this->_rabbit)->UpdateVisionRange(2);
 }
 
 void Game::HandleMouseSelectorInput() {
@@ -168,28 +183,30 @@ void Game::MoveView() {
 		if (this->_ev.key.code == sf::Keyboard::D) {
 			this->_mainView.move(static_cast<float>(this->TILE_SIZE.y) * this->SCALING_FACTOR, 0.f);
 		}
-		//this->_window->setView(this->_mainView);
 	}
 }
 
 void Game::RenderEntities() {
-	this->_carrot->Render(this->_window, this->SCALING_FACTOR);
-	this->_rabbit->Render(this->_window, this->SCALING_FACTOR);
-	dynamic_cast<Animal*>(this->_rabbit)->RenderVisibleTiles(this->_window, this->TILE_SIZE, this->SCALING_FACTOR);
+	for (int i = 0; i < this->nEntities; ++i) {
+		this->entities[i]->Render(this->_window, this->TILE_SIZE, this->SCALING_FACTOR);
+	}
 
-	/*this->_rabbit2->Render(this->_window, this->SCALING_FACTOR);
-	dynamic_cast<Animal*>(this->_rabbit2)->RenderVisibleTiles(this->_window, this->TILE_SIZE, this->SCALING_FACTOR);*/
+	this->_carrot->Render(this->_window, this->TILE_SIZE, this->SCALING_FACTOR);
+	//this->_rabbit->Render(this->_window, this->TILE_SIZE, this->SCALING_FACTOR);
 }
 
 void Game::UpdateEntities() {
+	for (int i = 0; i < this->nEntities; ++i) {
+		this->entities[i]->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
+		dynamic_cast<Animal*>(this->entities[i])->Update();
+	}
+
 	this->_carrot->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
-	this->_rabbit->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
-	/*this->_rabbit2->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);*/
+	//this->_rabbit->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
 
-	dynamic_cast<Animal*>(this->_rabbit)->Update();
-	//dynamic_cast<Animal*>(this->_rabbit2)->Update();
+	//dynamic_cast<Animal*>(this->_rabbit)->Update();
 }
-
+	
 Game::Game() {
 	this->InitVariables();
 	this->InitWindow();
@@ -201,7 +218,7 @@ Game::Game() {
 
 void Game::HandleInput() {
 	while (this->_window->pollEvent(this->_ev)) {
-		this->_selector.HandleInput(this->_ev);
+		this->_selector.HandleInput(this->_ev, this->entities);
 
 		switch (this->_ev.type) {
 		case sf::Event::Closed:
@@ -239,17 +256,19 @@ void Game::Update() {
 
 	this->UpdateEntities();
 	
-	this->_selector.SetSelectedEntity(*this->_carrot);
+	//this->_selector.SetSelectedEntity(*this->_carrot);
 	this->_selector.Update(this->_window);
 }
 
 void Game::Render() {
+	//Order matters here
+
 	this->_window->clear();
 	this->_window->draw(this->_tileMap);
-
+	this->_selector.Render(this->_window);
+	
 	this->RenderEntities();
 
-	this->_selector.Render(this->_window);
 	this->_window->display();
 }
 

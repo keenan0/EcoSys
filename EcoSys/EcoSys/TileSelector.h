@@ -2,6 +2,7 @@
 
 #include "includes.h"
 #include "Entity.h"
+#include "Animal.h"
 
 class TileSelector {
 private:
@@ -22,7 +23,6 @@ private:
 	sf::Color _outlineColor;
 
 	bool _isSelected;
-
 	Entity* _selectedEntity;
 
 	void InitVariables();
@@ -35,11 +35,11 @@ public:
 	TileSelector();
 	~TileSelector() = default;
 
-	void HandleInput(sf::Event ev);
+	void HandleInput(sf::Event ev, std::vector<Entity*>& entities);
 	void SetScalingFactor(float scalingFactor);
 	void SetTileSize(sf::Vector2u tileSize);
-	void SetSelectedEntity(Entity& entity);
-	
+	void SetSelectedEntity(Entity* entity);
+
 	void UpdateVariables(sf::Vector2u tileSize, float scalingFactor);
 	void Update(sf::RenderWindow* target);
 	void Render(sf::RenderTarget* target);

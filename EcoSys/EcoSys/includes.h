@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <random>
 #include <ctime>
 
 #include "enums.h"

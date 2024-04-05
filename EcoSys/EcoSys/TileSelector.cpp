@@ -1,5 +1,9 @@
 #include "TileSelector.h"
 
+TileSelector::TileSelector() {
+	this->InitVariables();
+}
+
 void TileSelector::InitVariables() {
 	this->_hover = sf::Color(38, 38, 38, 255);
 	this->_click = sf::Color(35, 166, 35, 255);
@@ -19,10 +23,6 @@ void TileSelector::InitVariables() {
 	this->_outline.setTexture(this->_outlineTexture);
 	this->_outline.setColor(this->_outlineColor);
 	this->_outline.setPosition(sf::Vector2f(0.f, 0.f));
-}
-
-TileSelector::TileSelector() {
-	this->InitVariables();
 }
 
 void TileSelector::UpdateMouse(sf::RenderWindow* target) {
@@ -79,7 +79,7 @@ void TileSelector::Debug() {
 	cout << "TEXTURE SIZE: " << this->_outlineTexture.getSize().x << ' ' << this->_outlineTexture.getSize().y << '\n';
 }
 
-void TileSelector::HandleInput(sf::Event ev) {
+void TileSelector::HandleInput(sf::Event ev, std::vector<Entity*>& entities) {
 	if (ev.type == sf::Event::KeyPressed) {
 		if (ev.key.code == sf::Keyboard::R) {
 			this->_isSelected = !this->_isSelected;
@@ -92,7 +92,25 @@ void TileSelector::HandleInput(sf::Event ev) {
 			cout << this->_tileCoords.x << ' ' << this->_tileCoords.y << '\n';
 		}
 	}
+	else {
+		if (ev.type == sf::Event::MouseButtonPressed) {
+			if (ev.mouseButton.button == sf::Mouse::Left) {
+				//If the left mouse button is pressed go through each entity in the game and see if the mouseTilePos is the same as the entity tile position
+	
+				for (int i = 0; i < entities.size(); ++i) {
+					//Cannot add or remove entities
+					if (this->_tileCoords == entities[i]->GetPosition()) {
+						cout << "CLICK" << entities[i]->GetPosition().x << ' ' << entities[i]->GetPosition().y << '\n';
+						this->_selectedEntity = entities[i];
+						this->_isSelected = true;
+					}
+				}
+			}
+		}
+	}
 }
+
+
 
 void TileSelector::RenderTileOutline(sf::RenderTarget* target) {
 	if (this->_isSelected) {
@@ -117,6 +135,10 @@ void TileSelector::UpdateVariables(sf::Vector2u tileSize, float scalingFactor) {
 
 void TileSelector::Update(sf::RenderWindow* target) {
 	this->UpdateMouse(target);
+	
+	if (!this->_isSelected) {
+		this->_selectedEntity = nullptr;
+	}
 
 	this->_tileCoords = this->GetTileCoords(target);
 
@@ -128,8 +150,15 @@ void TileSelector::Update(sf::RenderWindow* target) {
 
 void TileSelector::Render(sf::RenderTarget* target) {
 	this->RenderTileOutline(target);
+
+	if (this->_selectedEntity) {
+		dynamic_cast<Animal*>(this->_selectedEntity)->RenderVisibleTiles(target, this->_tileSize, this->_scalingFactor);
+		dynamic_cast<Animal*>(this->_selectedEntity)->DisplayStats();
+	}
 }
 
-void TileSelector::SetSelectedEntity(Entity& entity) {
-	this->_selectedEntity = nullptr;
+
+void TileSelector::SetSelectedEntity(Entity* entity) {
+	this->_selectedEntity = entity;
+	std::cout << "Called\n";
 }

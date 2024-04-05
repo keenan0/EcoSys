@@ -25,7 +25,7 @@ public:
     MapConfigurator(uint width, uint height, uint maxTextures = 1, MAP_CONFIG mode = MAP_CONFIG::RANDOM);
 
     void GenerateRandom();
-    void GeneratePerlin(uint maxOctaves = 4, float bias = 2.0f);
+    void GeneratePerlin(uint maxOctaves = 5, float bias = 1.0f);
 
     void Update(uint octaves, float bias);
     void Debug() const;

@@ -12,10 +12,11 @@ private:
 	int health;
 	int visionRange;
 
+	bool isMouseSelected;
+
 	MapConfigurator mapConfig;
 	sf::VertexArray visibleTilesVertices;
 	vector<sf::Vector2i> visibleTileOffset;
-
 
 	void InitVariables();
 
@@ -30,11 +31,14 @@ public:
 
 	void UpdateVisionRange(uint visionRange);
 
+	void DisplayStats();
 	void RenderVisibleTiles(sf::RenderTarget* target, const sf::Vector2u tileSize, const float scalingFactor);
 	void Update();
-	//virtual void Render(RenderWindow* currentWindow, const float scalingFactor) override;
+	void Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) override;
 
 	int GetHealth() const { return this->health; }
+	bool GetMouseSelected() const { return this->isMouseSelected; }
+	bool SwitchMouseSelected() { this->isMouseSelected = !this->isMouseSelected; };
 	void SetActionTime(float actionTime);
 };
 

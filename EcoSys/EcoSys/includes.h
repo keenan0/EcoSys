@@ -10,6 +10,7 @@
 #include <string>
 #include <random>
 #include <ctime>
+#include <exception>
 
 #include "enums.h"
 #include "Debug.h"

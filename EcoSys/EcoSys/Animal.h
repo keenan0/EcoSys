@@ -21,9 +21,10 @@ private:
 	void InitVariables();
 
 	bool IsBounded(int x, int y, uint width, uint height) const;
-	sf::Vector2i GetNextPosition();
+	virtual [[nodiscard]] sf::Vector2i GetNextPosition();
 	void ComputeTileOffsets();
 	void Wander();
+
 public:
 	Animal();
 	Animal(const MapConfigurator& mapConfig);

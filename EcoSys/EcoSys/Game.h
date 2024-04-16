@@ -10,46 +10,45 @@
 
 class Game {
 private:
-	//~CONSTANTE CARE AR PUTEA FI INCARCATE DINTR-UN CONFIG
+	// Constants that could be put into a config file.
 
-	//Path-ul spre icon-ul jocului
+	// The game's icon path
 	const string ICON_PATH = "img/carrot.png";
 	
-	//Dimensiunea fiecarui tile din textura
+	// The tile size that the game will be working with
 	const sf::Vector2u TILE_SIZE = sf::Vector2u(8, 8);
 
-	//Cat de mari sa fie randate tileuri-le
-	//Posibil sa nu mai fie nevoie de ea
+	// How should the tiles be scaled. 
 	const float SCALING_FACTOR = 2.f;
+	
+	/**
+	 * Variables for testing purposes.
+	 * 
+	 * They decide the randomness of the map generation
+	 */
 
-	//*****TEMPORAR PENTRU TESTARE
-	float BIAS = 0.5f;
+	float BIAS = 0.4f;
 	uint OCTAVES = 5;
 
-	//~VARIABILE PRIVATE
-	bool _endGame;
+	bool endGame;
 
-	sf::VideoMode _videoMode;
-	sf::RenderWindow* _window;
-	sf::Image _windowIcon;
-	sf::View _mainView;
+	sf::VideoMode videoMode;
+	sf::RenderWindow* window;
+	sf::Image windowIcon;
+	sf::View mainView;
 
-	sf::Event _ev;
+	sf::Event ev;
 
-	TileSelector _selector;
-	MapConfigurator _mapConfig;
-	TileMap _tileMap;
-
-	//TEMPORAR PENTRU A VERIFICA CUM SE ADAUGA O ENTITATE (CARROT)
-	Entity* _carrot;
-	Entity* _rabbit;
+	TileSelector selector;
+	MapConfigurator mapConfig;
+	TileMap tileMap;
 
 	vector<Entity*> entities;
 	uint nEntities;
 
 	std::random_device rd;
 
-	//~FUNCTII PRIVATE
+	// Private Functions
 	void InitVariables();
 	
 	void InitWindow();
@@ -70,9 +69,9 @@ public:
 	Game();
 	~Game();
 
-	const bool GetWindowOpen() const;
 	void HandleInput();
-	sf::Vector2u GetMapSize() const;
+	[[nodiscard]] const bool GetWindowOpen() const;
+	[[nodiscard]] sf::Vector2u GetMapSize() const;
 
 	void Update();
 	void Render();

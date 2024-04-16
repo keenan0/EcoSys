@@ -58,7 +58,7 @@ bool Animal::IsBounded(int x, int y,uint width, uint height) const {
 	return true;
 }
 
-sf::Vector2i Animal::GetNextPosition() {
+[[nodiscard]] sf::Vector2i Animal::GetNextPosition() {
 	sf::Vector2i curr = this->_tilePosition;
 	const int* map = this->mapConfig.GetMap();
 

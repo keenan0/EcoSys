@@ -3,14 +3,12 @@
 #include "Entity.h"
 
 class Plant : public Entity {
-public:
-	int _visionAmount;
-	int _healthAmount;
+protected:
 
-private:
-	Plant();
+public:
+	Plant() = default;
 	virtual ~Plant() override = default;
 
-
+	
 };
 

@@ -3,10 +3,31 @@
 #include "MapConfigurator.h"
 #include "TileMap.h"
 #include "TileSelector.h"
+
 #include "Animal.h"
+#include "Rabbit.h"
+#include "Fox.h"
+
 #include "Plant.h"
+#include "Carrot.h"
 
 #include "includes.h"
+
+/**
+ * TODO.
+ * 
+ * - WASD camera movement should move one tile at a time
+ * - Zooming out the camera should be bounded to the borders of the tilemap
+ * 
+ * - Add Button class with scaling texture!
+ * - Add Background for the GUI View
+ * 
+ * - Implement a A# like algorithm for the getNextPosition() method in animal
+ * - Each animal can have it's own getNextPosition() method, uniquely defined
+ * 
+ * - Make the animal be able to eat plants (Bonuses)
+ * - Implement collision for animals
+ */
 
 class Game {
 private:
@@ -43,8 +64,11 @@ private:
 	MapConfigurator mapConfig;
 	TileMap tileMap;
 
-	vector<Entity*> entities;
+	// Entity variables 
 	uint nEntities;
+
+	//POLIMORPHISM
+	vector<Entity*> entities;
 
 	std::random_device rd;
 
@@ -60,6 +84,9 @@ private:
 
 	void InitEntities();
 
+	void InitGui();
+	void InitBackgroundGui();
+
 	void HandleMouseSelectorInput();
 	void MoveView();
 
@@ -72,6 +99,8 @@ public:
 	void HandleInput();
 	[[nodiscard]] const bool GetWindowOpen() const;
 	[[nodiscard]] sf::Vector2u GetMapSize() const;
+
+	void deleteEntity(Entity* target);
 
 	void Update();
 	void Render();

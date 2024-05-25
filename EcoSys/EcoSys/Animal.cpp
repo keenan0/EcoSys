@@ -1,6 +1,6 @@
 #include "Animal.h"
 
-Animal::Animal() {
+Animal::Animal() : Entity() {
 	/*
 		@Animal constructor
 
@@ -9,7 +9,6 @@ Animal::Animal() {
 		- The function will throw an error because a mapConfig is [required].
 	*/
 
-	Entity();
 	Debug::Warning("Animal initialised without MapConfigurator.");
 	this->InitVariables();
 }
@@ -26,6 +25,18 @@ Animal::Animal(const MapConfigurator& mapConfig) {
 	this->mapConfig = mapConfig;
 	Debug::Loaded("Animal loaded successfully.");
 	this->InitVariables();
+}
+
+void Animal::GetEntitiesOnSameTile(const vector<Entity*> entities) {
+	this->entitiesOnSameTile.clear();
+	
+	for (const auto& entity : entities) {
+		if (entity != this) {
+			if (entity->GetPosition() == this->_tilePosition) {
+				this->entitiesOnSameTile.push_back(entity);
+			}
+		}
+	}
 }
 
 void Animal::InitVariables() {
@@ -58,7 +69,7 @@ bool Animal::IsBounded(int x, int y,uint width, uint height) const {
 	return true;
 }
 
-[[nodiscard]] sf::Vector2i Animal::GetNextPosition() {
+[[nodiscard]] sf::Vector2i Animal::GetNextPosition(const vector<Entity*> entities) {
 	sf::Vector2i curr = this->_tilePosition;
 	const int* map = this->mapConfig.GetMap();
 
@@ -87,8 +98,8 @@ bool Animal::IsBounded(int x, int y,uint width, uint height) const {
 	return possibleMoves[rand() % possibleMoves.size()];
 }
 
-void Animal::Wander() {
-	sf::Vector2i moveDir = this->GetNextPosition();
+void Animal::Wander(const vector<Entity*> entities) {
+	sf::Vector2i moveDir = this->GetNextPosition(entities);
 
 	this->Move(moveDir);
 }
@@ -208,13 +219,14 @@ void Animal::RenderVisibleTiles(sf::RenderTarget* target, const sf::Vector2u til
 }
 
 
-void Animal::Update() {
+void Animal::Update(const vector<Entity*> entities) {
 	/*
 		@return void
 
 		- Update function for the animal
 		- Uses the internal animal clock to update the animal position, stats, etc.
 	*/
+
 	this->ComputeTileOffsets();
 
 	sf::Time elapsedTime = this->clock.getElapsedTime();
@@ -222,15 +234,30 @@ void Animal::Update() {
 	if (elapsedTime.asSeconds() > this->actionTime) {
 		this->clock.restart();
 
-		this->Wander();
-		//this->GetNextPosition();
+		this->GetEntitiesOnSameTile(entities);
+
+		this->Behave();
+
+		this->Wander(entities);
+	}
+}
+
+void Animal::Behave() {
+	for (const auto& entity : this->entitiesOnSameTile) {
+		if (Carrot* carrot = dynamic_cast<Carrot*>(entity)) {
+			this->UpdateVisionRange(this->visionRange + 1);
+			cout << "I ate a carrot\n";
+			
+			//deleteEntity(entity);
+		}
 	}
 }
 
 void Animal::DisplayStats() {
 	std::cout << "Health: " << this->health << '\n';
 	std::cout << "Action Time: " << this->actionTime << '\n';
-	cout << '\n';
+	std::cout << "Vision range: " << this->visionRange << '\n';
+	std::cout << '\n';
 }
 
 void Animal::Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) {
@@ -250,5 +277,9 @@ void Animal::SetActionTime(float actionTime) {
 	*/
 
 	this->actionTime = actionTime;
+}
+
+void Animal::Eat(Entity*) {
+	cout << "Ate\n";
 }
 

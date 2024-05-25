@@ -1,5 +1,20 @@
 #include "Game.h"
 
+Game::Game() {
+	/**
+	 * The game constructor initialises everything.
+	 *
+	 */
+
+	this->InitVariables();
+	this->InitWindow();
+	this->InitMapConfigurator();
+	this->InitTileMap();
+	this->InitTileSelector();
+	this->InitEntities();
+	this->InitGui();
+}
+
 void Game::InitVariables() {
 	/**
 	 * Initialises all the game variables.
@@ -8,6 +23,7 @@ void Game::InitVariables() {
 	this->endGame = false;
 	this->window = nullptr;
 	this->mainView = sf::View(sf::FloatRect(0, 0, 1080, 720));
+	//this->guiView = sf::View(sf::FloatRect(0, 0, 1080, 720));
 }
 
 void Game::InitWindow() {
@@ -32,7 +48,8 @@ void Game::InitWindow() {
 	this->SetWindowIcon(this->ICON_PATH);
 	this->window->setVerticalSyncEnabled(true);
 
-	this->mainView.setViewport(sf::FloatRect(0.1f, 0.f, 1.f, 1.f));
+	//this->mainView.setViewport(sf::FloatRect(0.1f, 0.f, 1.f, 1.f));
+	//this->guiView.setViewport(sf::FloatRect(0.f, 0.f, 0.1f, 1.f));
 	this->window->setView(this->mainView);
 }
 
@@ -67,6 +84,8 @@ void Game::InitMapConfigurator() {
 	sf::Vector2u mapSize = GetMapSize();
 
 	this->mapConfig = MapConfigurator(mapSize.x, mapSize.y, 5, MAP_CONFIG::PERLIN);
+	this->mapConfig.Update(this->OCTAVES, this->BIAS);
+	this->tileMap.Update(this->mapConfig.GetMap(), this->TILE_SIZE, this->SCALING_FACTOR);
 }
 
 void Game::InitTileMap() {
@@ -109,27 +128,45 @@ void Game::InitEntities() {
 	 * Initialises the entities inside the game.
 	 */
 
-	this->nEntities = 50;
+	this->nEntities = 1;
 
 	std::mt19937 eng(rd());
 	std::uniform_int_distribution<> widthDistr(0, this->mapConfig.GetWidth());
 	std::uniform_int_distribution<> heightDistr(0, this->mapConfig.GetHeight());
-	std::uniform_int_distribution<> vision(1, 5);
+	std::uniform_int_distribution<> vision(8, 9);
 	std::uniform_int_distribution<> actionTime(1.f, 1.5f);
 
 	for (int i = 0; i < nEntities; ++i) {
-		this->entities.push_back(new Animal(this->mapConfig));
+		this->entities.push_back(new Rabbit(this->mapConfig));
 
-		this->entities[i]->LoadTexture("rabbit.png");
-		
 		int x = widthDistr(eng);
 		int y = heightDistr(eng);
-
-		this->entities[i]->SetPosition(x, y);
+		
+		if (i == 0) this->entities[i]->SetPosition(1, 1);
+		else this->entities[i]->SetPosition(x, y);
 
 		dynamic_cast<Animal*>(this->entities[i])->UpdateVisionRange(vision(eng));
 		dynamic_cast<Animal*>(this->entities[i])->SetActionTime(actionTime(eng));
 	}
+
+	// FOR DEBUGGING CARROT
+	this->entities.push_back(new Carrot());
+	this->entities[this->entities.size() - 1]->SetPosition(4,4);
+}
+
+void Game::InitGui() {
+	/**
+	 * Initialises the GUI elements (buttons, textures etc...).
+	 * 
+	 */
+	
+	/*this->backgroundColor = sf::Color(190, 100, 18);
+	this->InitBackgroundGui();
+
+	sf::Vector2f pos = sf::Vector2f(0.f, 0.f);
+	sf::Vector2f size = sf::Vector2f(40.f, 40.f);
+
+	this->playButton = Button(pos, size, "play.png");*/
 }
 
 void Game::HandleMouseSelectorInput() {
@@ -242,6 +279,20 @@ void Game::MoveView() {
 	}
 }
 
+void Game::InitBackgroundGui() {
+	/*this->background = sf::VertexArray(sf::Quads, 4);
+
+	this->background[0].position = sf::Vector2f(0.f, 0.f);
+	this->background[1].position = sf::Vector2f(1080.f, 0.f);
+	this->background[2].position = sf::Vector2f(1080.f, 720.f);
+	this->background[3].position = sf::Vector2f(0.f, 720.f);
+
+	this->background[0].color = this->backgroundColor;
+	this->background[1].color = this->backgroundColor;
+	this->background[2].color = this->backgroundColor;
+	this->background[3].color = this->backgroundColor;*/
+}
+
 void Game::RenderEntities() {
 	/**
 	 * Renders all entities in the game.
@@ -249,7 +300,9 @@ void Game::RenderEntities() {
 	 * Calls the render function for each entity
 	 */
 
-	for (int i = 0; i < this->nEntities; ++i) {
+	for (int i = 0; i < this->entities.size(); ++i) {
+		if (this->entities[i] == nullptr) continue;
+
 		this->entities[i]->Render(this->window, this->TILE_SIZE, this->SCALING_FACTOR);
 	}
 }
@@ -258,28 +311,22 @@ void Game::UpdateEntities() {
 	/**
 	 * Updates all the entities in the game.
 	 * 
-	 * Calls the UpdateSprite function for each entity
+	 * Calls the UpdateSprite function for each entity and sets the tilePosition accordingly
 	 * Calls the Update function for each entity
 	 */
 	
-	for (int i = 0; i < this->nEntities; ++i) {
+	for (int i = 0; i < this->entities.size(); ++i) {
+		if (this->entities[i] == nullptr) continue;
+		
 		this->entities[i]->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
-		dynamic_cast<Animal*>(this->entities[i])->Update();
+		
+		if (Rabbit* rabbit = dynamic_cast<Rabbit*>(entities[i])) {
+			rabbit->Update(this->entities);
+		}
+		else if(Animal* animal = dynamic_cast<Animal*>(this->entities[i])){
+			animal->Update(this->entities);
+		}
 	}
-}
-	
-Game::Game() {
-	/**
-	 * The game constructor initialises everything.
-	 * 
-	 */
-
-	this->InitVariables();
-	this->InitWindow();
-	this->InitMapConfigurator();
-	this->InitTileMap();
-	this->InitTileSelector();
-	this->InitEntities();
 }
 
 void Game::HandleInput() {
@@ -327,6 +374,17 @@ void Game::Update() {
 	this->UpdateEntities();
 	
 	this->selector.Update(this->window);
+
+
+	// Update the GUI
+	sf::Vector2i mousePosi = sf::Mouse::getPosition(*this->window);
+	sf::Vector2f mousePos = sf::Vector2f(
+		static_cast<float>(mousePosi.x),
+		static_cast<float>(mousePosi.y)
+	);
+
+	//sf::Vector2f mouse = sf::Vector2f(this->window->mapCoordsToPixel(mousePos, this->guiView).x, this->window->mapCoordsToPixel(mousePos, this->guiView).y);
+	//this->playButton.Update(this->window->mapPixelToCoords(sf::Mouse::getPosition()));
 }
 
 void Game::Render() {
@@ -337,6 +395,7 @@ void Game::Render() {
 	// First the window is cleared
 	this->window->clear();
 
+	this->window->setView(this->mainView);
 	// Then the tilemap is drawn
 	this->window->draw(this->tileMap);
 	// Then the selector, which is part of the GUI
@@ -346,6 +405,18 @@ void Game::Render() {
 	this->RenderEntities();
 
 
+	// !!!!!!!!!!!!!!!!!!!!!!!! GUI
+	// Render the GUI
+	//this->window->setView(this->guiView);
+
+	// Draw the GUI here
+	//this->window->draw(this->background);
+	//this->playButton.Render(this->window);
+
+
+
+	// Reset the view
+	//this->window->setView(this->mainView);
 	// And lastly, the window is displayed after the frame is drawn
 	this->window->display();
 }
@@ -378,4 +449,12 @@ Game::~Game() {
 	}
 
 	return sf::Vector2u(0, 0);
+}
+
+void Game::deleteEntity(Entity* target) {
+	auto it = std::remove(this->entities.begin(), this->entities.end(), target);
+
+	if (it != this->entities.end()) {
+		this->entities.erase(it, this->entities.end());		
+	}
 }

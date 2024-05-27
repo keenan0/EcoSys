@@ -10,9 +10,6 @@ AnimalFactory::AnimalFactory(const AnimalFactoryConfig& other) {
 	this->config.widthDistr = other.widthDistr;
 	this->config.heightDistr = other.heightDistr;
 
-	this->config.nFox = other.nFox;
-	this->config.nRabbit = other.nRabbit;
-
 	this->config.foxVision = other.foxVision;
 	this->config.rabbitVision = other.rabbitVision;
 

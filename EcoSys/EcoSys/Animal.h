@@ -41,6 +41,8 @@ public:
 	virtual ~Animal() override = default;
 
 	void UpdateVisionRange(uint visionRange);
+	void UpdateSpeed(float deltaSpeed);
+	void Heal(int healAmount);
 
 	void DisplayStats();
 	void RenderVisibleTiles(sf::RenderTarget* target, const sf::Vector2u tileSize, const float scalingFactor);
@@ -48,6 +50,7 @@ public:
 	void Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) override;
 
 	int GetHealth() const { return this->health; }
+	int GetVisionRange() const { return this->visionRange; }
 	bool GetMouseSelected() const { return this->isMouseSelected; }
 	bool SwitchMouseSelected() { this->isMouseSelected = !this->isMouseSelected; };
 	void SetActionTime(float actionTime);

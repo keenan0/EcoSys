@@ -10,5 +10,7 @@ public:
 		(this)->LoadTexture(this->carrotTexture);
 	}
 	~Carrot() = default;
+
+	virtual void Consume(Animal* other) override;
 };
 

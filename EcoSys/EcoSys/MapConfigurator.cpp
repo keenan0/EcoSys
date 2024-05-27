@@ -7,8 +7,13 @@ void MapConfigurator::GenerateSeed() const {
         - functia returneaza genereaza un seed random pentru a fi ulterior prelucrat de PerlinNoise()
     */
 
+    std::random_device rd;
+    std::mt19937 eng(rd());
+
+    std::uniform_real_distribution<> seed(0, 1);
+
     for (int i = 0; i < this->_width * this->_height; ++i)
-        this->_noiseSeed[i] = (float)rand() / (float)RAND_MAX;
+        this->_noiseSeed[i] = seed(eng);
 }
 
 void MapConfigurator::PerlinNoise(uint maxOctaves, float bias) {

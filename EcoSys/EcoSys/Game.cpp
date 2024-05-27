@@ -4,6 +4,11 @@
 #include "Rabbit.h"
 #include "Fox.h"
 #include "Carrot.h"
+#include "PlantDecorator.h"
+#include "VisionDecorator.h"
+#include "HealDecorator.h"
+#include "SpeedDecorator.h"
+#include "AnimalHolder.h"
 
 Game::Game() {
 	/**
@@ -139,18 +144,12 @@ void Game::InitEntities() {
 
 	std::uniform_int_distribution<> animalType(0, ANIMAL_FACTORY::SIZE);
 
-	int nRabbits = 1;
-	int nFoxes = 0;
+	this->SpawnAnimals();
+	this->SpawnPlants();
+}
 
-	Fox* foxy = new Fox(this->mapConfig);
-	foxy->SetPosition(2, 2);
-	foxy->UpdateVisionRange(4);
-	foxy->SetActionTime(0.2f);
-
-	//this->entities.push_back(foxy);
-
+void Game::SpawnAnimals() {
 	AnimalFactoryConfig config(
-		nFoxes, nRabbits,
 		0, this->mapConfig.GetWidth(),
 		0, this->mapConfig.GetHeight(),
 		sf::Vector2i(4, 7),
@@ -160,20 +159,41 @@ void Game::InitEntities() {
 		this->mapConfig
 	);
 
+	int nRabbits = 5;
+	int nFoxes = 2;
+
 	AnimalFactory animalSpawner(config);
-	for (int i = 0; i < nRabbits; ++i) {
-		Animal* spawned = animalSpawner.GetAnimal(ANIMAL_FACTORY::RABBIT);
+	for (int i = 0; i < nRabbits; ++i)
+		this->entities.push_back(animalSpawner.GetAnimal(ANIMAL_FACTORY::RABBIT));
 
-		this->entities.push_back(spawned);
+	for (int i = 0; i < nFoxes; ++i)
+		this->entities.push_back(animalSpawner.GetAnimal(ANIMAL_FACTORY::FOX));
+
+	for (const auto& animal : this->entities) {
+		if (Rabbit* rabbit = dynamic_cast<Rabbit*>(animal)) {
+			AnimalHolder<Rabbit*> myRabbit(rabbit);
+			myRabbit.DisplayStats();
+		}
+		else if (Fox* fox = dynamic_cast<Fox*>(animal)) {
+			AnimalHolder<Fox*> myFox(fox);
+			myFox.DisplayStats();
+		}
 	}
+}
 
-	for (int i = 0; i < nFoxes; ++i) {
-		Animal* spawned = animalSpawner.GetAnimal(ANIMAL_FACTORY::FOX);
+void Game::SpawnPlants() {
+	Plant* myPlant = new Carrot();
+	
+	/*
+	
+	myPlant = new HealDecorator(myPlant);
+	myPlant = new SpeedDecorator(myPlant);
+	myPlant = new VisionDecorator(myPlant);
+	
+	*/
 
-		this->entities.push_back(spawned);
-	}
-
-
+	myPlant->SetPosition(5, 5);
+	this->entities.push_back(myPlant);
 }
 
 void Game::InitGui() {
@@ -325,7 +345,7 @@ void Game::RenderEntities() {
 	for (int i = 0; i < this->entities.size(); ++i) {
 		if (this->entities[i] == nullptr) continue;
 
-		this->entities[i]->Render(this->window, this->TILE_SIZE, this->SCALING_FACTOR);
+		dynamic_cast<Entity*>(this->entities[i])->Render(this->window, this->TILE_SIZE, this->SCALING_FACTOR);
 	}
 }
 
@@ -342,14 +362,9 @@ void Game::UpdateEntities() {
 		
 		this->entities[i]->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
 
-		try {
-			dynamic_cast<Animal*>(this->entities[i])->Update(this->entities);
+		if(Animal* animal = dynamic_cast<Animal*>(this->entities[i]))
+			animal->Update(this->entities);
 
-		}
-		catch (...) {
-			Debug::Error("Can't update non animal.");
-		}
-		
 		/*if (Rabbit* rabbit = dynamic_cast<Rabbit*>(entities[i])) {
 			rabbit->Update(this->entities);
 		}

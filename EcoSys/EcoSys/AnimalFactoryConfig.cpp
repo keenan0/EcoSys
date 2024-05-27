@@ -1,13 +1,10 @@
 #include "AnimalFactoryConfig.h"
 
-AnimalFactoryConfig::AnimalFactoryConfig(int foxes, int nRabbit, int minWidth, int maxWidth, int minHeight, int maxHeight, sf::Vector2i foxVision, sf::Vector2i rabbitVision, sf::Vector2f foxActionTime, sf::Vector2f rabbitActionTime, const MapConfigurator& map) {
+AnimalFactoryConfig::AnimalFactoryConfig(int minWidth, int maxWidth, int minHeight, int maxHeight, sf::Vector2i foxVision, sf::Vector2i rabbitVision, sf::Vector2f foxActionTime, sf::Vector2f rabbitActionTime, const MapConfigurator& map) {
 	this->eng = std::mt19937(this->rd());
 
 	this->widthDistr = std::uniform_int_distribution<>(minWidth, maxWidth);
 	this->heightDistr = std::uniform_int_distribution<>(minHeight, maxHeight);
-
-	this->nFox = std::uniform_int_distribution<>(0, foxes);
-	this->nRabbit= std::uniform_int_distribution<>(0, nRabbit);
 
 	this->foxVision = std::uniform_int_distribution<>(foxVision.x, foxVision.y);
 	this->rabbitVision = std::uniform_int_distribution<>(rabbitVision.x, rabbitVision.y);

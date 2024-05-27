@@ -6,8 +6,10 @@ Rabbit::Rabbit(const MapConfigurator& mapConfig) : Animal(mapConfig), rabbitText
 
 void Rabbit::Eat(Entity* other) {
 	if (Carrot* carrot = dynamic_cast<Carrot*>(other)) {
-		this->UpdateVisionRange(this->visionRange + 1);
+		//this->UpdateVisionRange(this->visionRange + 1);
 		cout << "I ate a carrot\n";
+
+		carrot->Consume(this);
 
 		Game::deleteEntity(carrot);
 	}

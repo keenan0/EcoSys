@@ -22,6 +22,10 @@ class Fox;
 class Plant;
 class Carrot;
 
+class PlantDecorator;
+class HealDecorator;
+class SpeedDecorator;
+class VisionDecorator;
 
 /**
  * TODO.
@@ -98,6 +102,9 @@ private:
 
 	void RenderEntities();
 	void UpdateEntities();
+
+	void SpawnAnimals();
+	void SpawnPlants();
 public:
 	~Game();
 

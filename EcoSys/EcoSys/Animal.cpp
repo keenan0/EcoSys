@@ -98,6 +98,21 @@ bool Animal::IsBounded(int x, int y,uint width, uint height) const {
 	return possibleMoves[rand() % possibleMoves.size()];
 }
 
+void Animal::UpdateSpeed(float deltaSpeed) {
+	if (this->actionTime - deltaSpeed > 0.4f) {
+		this->actionTime -= deltaSpeed;
+	}
+	else {
+		this->actionTime = 0.4f;
+	}
+}
+
+void Animal::Heal(int healAmount) {
+	if (this->health + healAmount < 0) this->health = 0;
+	
+	this->health += healAmount;
+}
+
 void Animal::Wander(const vector<Entity*> entities) {
 	sf::Vector2i moveDir = this->GetNextPosition(entities);
 
@@ -248,10 +263,10 @@ void Animal::Behave() {
 }
 
 void Animal::DisplayStats() {
-	/*std::cout << "Health: " << this->health << '\n';
+	std::cout << "Health: " << this->health << '\n';
 	std::cout << "Action Time: " << this->actionTime << '\n';
 	std::cout << "Vision range: " << this->visionRange << '\n';
-	std::cout << '\n';*/
+	std::cout << '\n';
 }
 
 void Animal::Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) {

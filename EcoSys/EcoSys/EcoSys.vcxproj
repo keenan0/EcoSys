@@ -134,6 +134,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animal.cpp" />
+    <ClCompile Include="AnimalFactory.cpp" />
+    <ClCompile Include="AnimalFactoryConfig.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Carrot.cpp" />
     <ClCompile Include="Debug.cpp" />
@@ -150,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animal.h" />
+    <ClInclude Include="AnimalFactory.h" />
+    <ClInclude Include="AnimalFactoryConfig.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Carrot.h" />
     <ClInclude Include="Debug.h" />
@@ -164,6 +168,9 @@
     <ClInclude Include="Rabbit.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="TileSelector.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TODO.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

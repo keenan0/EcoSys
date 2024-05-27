@@ -1,8 +1,9 @@
 #pragma once
 
 #include "includes.h"
-#include "Entity.h"
-#include "Animal.h"
+
+class Entity;
+class Animal;
 
 class TileSelector {
 private:

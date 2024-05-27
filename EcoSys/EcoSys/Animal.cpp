@@ -231,33 +231,27 @@ void Animal::Update(const vector<Entity*> entities) {
 
 	sf::Time elapsedTime = this->clock.getElapsedTime();
 
+	this->GetEntitiesOnSameTile(entities);
+	this->Behave();
+	
 	if (elapsedTime.asSeconds() > this->actionTime) {
 		this->clock.restart();
-
-		this->GetEntitiesOnSameTile(entities);
-
-		this->Behave();
-
+		 
 		this->Wander(entities);
 	}
 }
 
 void Animal::Behave() {
-	for (const auto& entity : this->entitiesOnSameTile) {
-		if (Carrot* carrot = dynamic_cast<Carrot*>(entity)) {
-			this->UpdateVisionRange(this->visionRange + 1);
-			cout << "I ate a carrot\n";
-			
-			//deleteEntity(entity);
-		}
+	for (Entity* entity : this->entitiesOnSameTile) {
+		this->Eat(entity);
 	}
 }
 
 void Animal::DisplayStats() {
-	std::cout << "Health: " << this->health << '\n';
+	/*std::cout << "Health: " << this->health << '\n';
 	std::cout << "Action Time: " << this->actionTime << '\n';
 	std::cout << "Vision range: " << this->visionRange << '\n';
-	std::cout << '\n';
+	std::cout << '\n';*/
 }
 
 void Animal::Render(sf::RenderWindow* currentWindow, const sf::Vector2u tileSize, const float scalingFactor) {

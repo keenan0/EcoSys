@@ -10,6 +10,8 @@ sf::Vector2f Entity::MapTileCoords(sf::Vector2i tileCoords) {
 Entity::Entity() {
     this->_isOnTile = TILE_TYPE::UNDEFINED;
     this->_tilePosition = sf::Vector2i(0, 0);
+
+    this->entityId = ++incrementEntityId;
 }
 
 Entity::Entity(const Entity& toCopy) {
@@ -46,8 +48,8 @@ Entity& Entity::operator=(const Entity& e) {
     this->_tilePosition = e._tilePosition;
     this->_sprite = e._sprite;
     this->_texture = e._texture;
-
-    cout << "Avertizare: Entiate atribuita cu succes\n";
+    
+    this->entityId = e.entityId;
 
     return *this;
 }

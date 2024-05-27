@@ -36,3 +36,9 @@ enum TILE_TYPE {
 enum MAP_CONFIG {
     RANDOM, PERLIN
 };
+
+enum ANIMAL_FACTORY {
+    RABBIT,
+    FOX,
+    SIZE
+};

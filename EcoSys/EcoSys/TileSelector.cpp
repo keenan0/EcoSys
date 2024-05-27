@@ -1,4 +1,6 @@
 #include "TileSelector.h"
+#include "Animal.h"
+#include "Entity.h"
 
 TileSelector::TileSelector() {
 	this->InitVariables();

@@ -5,8 +5,11 @@ Rabbit::Rabbit(const MapConfigurator& mapConfig) : Animal(mapConfig), rabbitText
 }
 
 void Rabbit::Eat(Entity* other) {
-	if (Carrot* food = dynamic_cast<Carrot*>(other)) {
-		cout << "Eating carrot.\n";
+	if (Carrot* carrot = dynamic_cast<Carrot*>(other)) {
+		this->UpdateVisionRange(this->visionRange + 1);
+		cout << "I ate a carrot\n";
+
+		Game::deleteEntity(carrot);
 	}
 }
 
@@ -76,6 +79,10 @@ sf::Vector2i Rabbit::GetNextPosition(const vector<Entity*> entities) {
 				} else if (Carrot* carrot = dynamic_cast<Carrot*>(entity)) {
 					points = 15.f;
 					cout << "Added 15 points for food.\n";
+				}
+				else if (Fox* fox = dynamic_cast<Fox*>(entity)) {
+					points = -30.f;
+					cout << "Saw fox, run.\n";
 				}
 				cout << "Normalised offset: " << normalisedOffset.x << ' ' << normalisedOffset.y << '\n';
 				movingChance[HelperFunctions::MapVectot2iToInt(normalisedOffset)] += points;
@@ -168,7 +175,10 @@ sf::Vector2i Rabbit::GetNextPosition(const vector<Entity*> entities) {
 	if (possibleMoves.size() == 0)
 		return sf::Vector2i(0, 0);
 
-	return possibleMoves[rand() % possibleMoves.size()];
+	std::mt19937 eng(rd());
+	std::uniform_int_distribution<> index(0, possibleMoves.size());
+
+	return possibleMoves[index(eng) % possibleMoves.size()];
 }
 
 //void Rabbit::Update(const vector<Entity*> entities) {

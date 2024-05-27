@@ -1,4 +1,9 @@
 #include "Game.h"
+#include "Entity.h"
+#include "Animal.h"
+#include "Rabbit.h"
+#include "Fox.h"
+#include "Carrot.h"
 
 Game::Game() {
 	/**
@@ -128,30 +133,47 @@ void Game::InitEntities() {
 	 * Initialises the entities inside the game.
 	 */
 
-	this->nEntities = 1;
+	// FOR DEBUGGING CARROT
+	/*this->entities.push_back(new Carrot());
+	this->entities[this->entities.size() - 1]->SetPosition(4,4);*/
 
-	std::mt19937 eng(rd());
-	std::uniform_int_distribution<> widthDistr(0, this->mapConfig.GetWidth());
-	std::uniform_int_distribution<> heightDistr(0, this->mapConfig.GetHeight());
-	std::uniform_int_distribution<> vision(8, 9);
-	std::uniform_int_distribution<> actionTime(1.f, 1.5f);
+	std::uniform_int_distribution<> animalType(0, ANIMAL_FACTORY::SIZE);
 
-	for (int i = 0; i < nEntities; ++i) {
-		this->entities.push_back(new Rabbit(this->mapConfig));
+	int nRabbits = 1;
+	int nFoxes = 0;
 
-		int x = widthDistr(eng);
-		int y = heightDistr(eng);
-		
-		if (i == 0) this->entities[i]->SetPosition(1, 1);
-		else this->entities[i]->SetPosition(x, y);
+	Fox* foxy = new Fox(this->mapConfig);
+	foxy->SetPosition(2, 2);
+	foxy->UpdateVisionRange(4);
+	foxy->SetActionTime(0.2f);
 
-		dynamic_cast<Animal*>(this->entities[i])->UpdateVisionRange(vision(eng));
-		dynamic_cast<Animal*>(this->entities[i])->SetActionTime(actionTime(eng));
+	//this->entities.push_back(foxy);
+
+	AnimalFactoryConfig config(
+		nFoxes, nRabbits,
+		0, this->mapConfig.GetWidth(),
+		0, this->mapConfig.GetHeight(),
+		sf::Vector2i(4, 7),
+		sf::Vector2i(2, 4),
+		sf::Vector2f(1.2f, 1.5f),
+		sf::Vector2f(0.8f, 1.2f),
+		this->mapConfig
+	);
+
+	AnimalFactory animalSpawner(config);
+	for (int i = 0; i < nRabbits; ++i) {
+		Animal* spawned = animalSpawner.GetAnimal(ANIMAL_FACTORY::RABBIT);
+
+		this->entities.push_back(spawned);
 	}
 
-	// FOR DEBUGGING CARROT
-	this->entities.push_back(new Carrot());
-	this->entities[this->entities.size() - 1]->SetPosition(4,4);
+	for (int i = 0; i < nFoxes; ++i) {
+		Animal* spawned = animalSpawner.GetAnimal(ANIMAL_FACTORY::FOX);
+
+		this->entities.push_back(spawned);
+	}
+
+
 }
 
 void Game::InitGui() {
@@ -319,14 +341,33 @@ void Game::UpdateEntities() {
 		if (this->entities[i] == nullptr) continue;
 		
 		this->entities[i]->UpdateSprite(this->TILE_SIZE, this->SCALING_FACTOR);
+
+		try {
+			dynamic_cast<Animal*>(this->entities[i])->Update(this->entities);
+
+		}
+		catch (...) {
+			Debug::Error("Can't update non animal.");
+		}
 		
-		if (Rabbit* rabbit = dynamic_cast<Rabbit*>(entities[i])) {
+		/*if (Rabbit* rabbit = dynamic_cast<Rabbit*>(entities[i])) {
 			rabbit->Update(this->entities);
 		}
 		else if(Animal* animal = dynamic_cast<Animal*>(this->entities[i])){
 			animal->Update(this->entities);
 		}
+		else if (Fox* fox = dynamic_cast<Fox*>(this->entities[i])) {
+			fox->Update(this->entities);
+		}*/
 	}
+}
+
+Game* Game::GetInstance() {
+	if (gameInstance == nullptr) {
+		gameInstance = new Game();
+	}
+
+	return gameInstance;
 }
 
 void Game::HandleInput() {
@@ -452,9 +493,11 @@ Game::~Game() {
 }
 
 void Game::deleteEntity(Entity* target) {
-	auto it = std::remove(this->entities.begin(), this->entities.end(), target);
-
-	if (it != this->entities.end()) {
-		this->entities.erase(it, this->entities.end());		
+	int targetId = target->GetEntityId();
+	
+	for (int i = 0; i < entities.size(); ++i){
+		if (entities[i]->GetEntityId() == targetId) {
+			entities.erase(entities.begin() + i);
+		}
 	}
 }

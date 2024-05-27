@@ -12,6 +12,8 @@ public:
 		if (normalisedOffset == sf::Vector2i(-1, 1)) { return 5; }
 		if (normalisedOffset == sf::Vector2i(0, 1)) { return 6; }
 		if (normalisedOffset == sf::Vector2i(1, 1)) { return 7; }
+
+		return 0;
 	}
 
 	static [[nodiscard]] sf::Vector2i MapIntToVector2i(int index) {
@@ -23,6 +25,8 @@ public:
 		if (index == 5) { return sf::Vector2i(-1, 1); }
 		if (index == 6) { return sf::Vector2i(0, 1); }
 		if (index == 7) { return sf::Vector2i(1, 1); }
+
+		return sf::Vector2i(0, 0);
 	}
 
 	static [[nodiscard]] sf::Vector2i GetNeighbours(int index) {

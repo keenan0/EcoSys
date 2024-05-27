@@ -2,11 +2,14 @@
 
 #include "includes.h"
 #include "MapConfigurator.h"
-#include "Entity.h"
+
+#include "Game.h"
 #include "Carrot.h"
 
 class Animal : public Entity {
 protected:
+	std::random_device rd;
+
 	sf::Clock clock;
 	float actionTime;
 

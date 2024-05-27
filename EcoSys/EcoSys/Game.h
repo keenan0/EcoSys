@@ -1,37 +1,43 @@
 #pragma once
 
+//#include "Animal.h"
+//#include "Rabbit.h"
+//#include "Fox.h"
+//
+//#include "Plant.h"
+//#include "Carrot.h"
+
 #include "MapConfigurator.h"
 #include "TileMap.h"
 #include "TileSelector.h"
-
-#include "Animal.h"
-#include "Rabbit.h"
-#include "Fox.h"
-
-#include "Plant.h"
-#include "Carrot.h"
+#include "AnimalFactory.h"
 
 #include "includes.h"
+
+class Entity;
+class Animal;
+class Rabbit;
+class Fox;
+
+class Plant;
+class Carrot;
+
 
 /**
  * TODO.
  * 
  * - WASD camera movement should move one tile at a time
  * - Zooming out the camera should be bounded to the borders of the tilemap
- * 
- * - Add Button class with scaling texture!
- * - Add Background for the GUI View
- * 
- * - Implement a A# like algorithm for the getNextPosition() method in animal
- * - Each animal can have it's own getNextPosition() method, uniquely defined
- * 
- * - Make the animal be able to eat plants (Bonuses)
- * - Implement collision for animals
  */
 
 class Game {
 private:
+	Game();
+
 	// Constants that could be put into a config file.
+	// Singleton design pattern
+
+	static Game* gameInstance;
 
 	// The game's icon path
 	const string ICON_PATH = "img/carrot.png";
@@ -68,7 +74,7 @@ private:
 	uint nEntities;
 
 	//POLIMORPHISM
-	vector<Entity*> entities;
+	static vector<Entity*> entities;
 
 	std::random_device rd;
 
@@ -93,14 +99,15 @@ private:
 	void RenderEntities();
 	void UpdateEntities();
 public:
-	Game();
 	~Game();
+
+	static Game* GetInstance();
 
 	void HandleInput();
 	[[nodiscard]] const bool GetWindowOpen() const;
 	[[nodiscard]] sf::Vector2u GetMapSize() const;
 
-	void deleteEntity(Entity* target);
+	static void deleteEntity(Entity* target);
 
 	void Update();
 	void Render();

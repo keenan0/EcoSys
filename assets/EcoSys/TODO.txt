@@ -1,0 +1,32 @@
+﻿25/05 TODO LIST
+
+*******************************
+ANIMAL FUNCTIONALITIES
+*******************************
+
+	Change the Uniformisation in the GetNextPosition method for Animals.
+✅  Add Singleton pattern to the Game object.
+✅  Complete the eat function in animal:
+		* Delete the hit Entity from Game
+
+	A spawner/factory for plants
+	Add reproduction for animals
+	Add hunting maybe?
+
+
+********************************
+GAME FUNCITONALITIES 
+********************************
+
+	Press space to pause or play (just dont update)
+
+	1. Fox
+	2. Rabbit
+	3. Carrot
+	4. Lettuce
+	5. Berries
+
+	Select one of these and spawn them when wanted
+	When the tile selector is on:
+		* render a png based on the option selected
+		* spawn a new entity where needed

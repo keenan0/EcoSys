@@ -12,10 +12,12 @@ The map in **ECOSYS** is built on a tile-based system, represented as a 2D matri
 
 #### Initial Map Layout 
 >This is the default map appearance when the game first runs.
+>
 ><img src="https://github.com/user-attachments/assets/f528c476-1b2d-45b3-a57d-e79c94388425" alt="Description" width="300">
 
 #### Modifying Noise Bias 
 >Pressing the left and right arrow keys will adjust the bias of the noise.
+>
 ><img src="https://github.com/user-attachments/assets/4b40eb3a-ed09-45cf-8e8c-7449b251a7fa" alt="Description" width="300">
 
 
@@ -48,6 +50,7 @@ The choice will be based on a simple algorithm that gives tiles a value based on
 Everything the bunny sees is marked in the game as **green tiles**.
 
 The algorithm for making a move will analyse all those tiles and pick one of the 8 tiles in the yellow highlighted area to move towards based on a danger level.
+
 <img src="https://github.com/user-attachments/assets/c78e3116-35f6-4dfe-81f2-9c5bc102f7ca" alt="Description" width="300">
 
 Also, each Animal has it's own move_speed, meaning that a rabbit could outrun the fox's vision or the opposite.

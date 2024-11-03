@@ -23,7 +23,7 @@ The map in **ECOSYS** is built on a tile-based system, represented as a 2D matri
 
 #### Adjusting Noise Octaves 
 >Pressing the spacebar changes the number of octaves used in the noise, creating variations in terrain.
-<img src="https://github.com/user-attachments/assets/36afe7dc-9088-441a-bc2e-5e3276cbc508" alt="Description" width="300">
+><img src="https://github.com/user-attachments/assets/36afe7dc-9088-441a-bc2e-5e3276cbc508" alt="Description" width="300">
 
 ## Basic controls
 The game has basic camera controls such as moving the camera around using WASD and zooming in and out.

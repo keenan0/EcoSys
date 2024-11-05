@@ -1,6 +1,3 @@
-
-# ECOSYS
-
 ## Overview
 **ECOSYS** is a top-down, 2D simulation game where players can construct and observe their own ecosystems. Players select various species of animals and plants, along with their respective populations, to create a customized ecosystem. Once the ecosystem is set, the simulation runs autonomously, allowing players to witness the interactions and natural developments within their environment.
 
